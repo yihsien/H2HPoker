@@ -42,4 +42,10 @@ public class HPlayer implements IPlayer {
 		money -= amount;
 	}
 
+    @Override
+    public void addCard(ICard card) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

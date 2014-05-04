@@ -4,10 +4,10 @@
 .LSOverride
 
 # Emacs
-
 *~
 [#]*[#]
 .\#*
+*.exe.stackdump
 
 # R studio
 .Rhistory

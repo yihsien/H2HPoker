@@ -34,4 +34,9 @@ public class CPlayer implements IPlayer {
 		money -= amount;
 	}
 
+    @Override
+    public void addCard(ICard card) {
+        
+    }
+
 }
