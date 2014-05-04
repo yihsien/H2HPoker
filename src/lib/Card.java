@@ -43,4 +43,20 @@ public class Card implements ICard, Comparable<ICard> {
     public int getValue() {
         return this.value;
     }
+    
+    @Override
+    public String toString() {
+        String strValue = "";
+        if (this.value <= 10) {
+            strValue = String.valueOf(this.value);
+        } else {
+            switch(this.value) {
+                case 11: strValue = "Jack"; break;
+                case 12: strValue = "Queen"; break;
+                case 13: strValue = "King"; break;
+                case 14: strValue = "Ace"; break;
+            }
+        }
+        return strValue + " of " + this.suit.toString();
+    }
 }

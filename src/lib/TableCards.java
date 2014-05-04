@@ -49,5 +49,9 @@ public class TableCards implements ITableCards {
         return this.cards;
     }
 
-    
+    @Override
+    public void clear() {
+        this.cards.clear();
+        this.stage = Stage.PRE_FLOP;
+    }
 }
