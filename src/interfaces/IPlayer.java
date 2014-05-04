@@ -8,6 +8,10 @@ public interface IPlayer {
 	
 	public int getMoney();
 	
-	public IBet getBet();
+	public int getBet(int bet);
+	
+	public void addMoney(int amount);
+	
+	public void subMoney(int amount);
 	
 }
