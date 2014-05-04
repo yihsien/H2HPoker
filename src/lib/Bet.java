@@ -20,4 +20,9 @@ public class Bet implements IBet {
 		return value;
 	}
 
+    @Override
+    public void clear() {
+        this.value = 0;
+    }
+
 }

@@ -11,4 +11,6 @@ public interface ITableCards {
     public void openRiver(IDeck deck);
 
     public ArrayList<ICard> getCards();
+
+    public void clear();
 }
