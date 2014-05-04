@@ -1,0 +1,23 @@
+# OS X
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Emacs
+
+*~
+[#]*[#]
+.\#*
+
+# R studio
+.Rhistory
+.Rapp.history
+
+
+# Java
+*.class
+
+# Eclipse Files
+.classpath
+.project
+.buildpath
