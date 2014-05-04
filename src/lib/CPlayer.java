@@ -1,15 +1,15 @@
 package lib;
 
-import interfaces.IBet;
 import interfaces.ICard;
 import interfaces.IPlayer;
+import java.util.*;
 
 public class CPlayer implements IPlayer {
 
 	private int money;
 	
 	@Override
-	public ICard[] getHand() {
+	public ArrayList<ICard> getHand() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,10 +1,11 @@
 package interfaces;
+import java.util.*;
 
 public interface IPlayer {
 
     public void addCard(ICard card);
 
-	public ICard[] getHand();
+	public ArrayList<ICard> getHand();
 	
 	public int getMoney();
 	
