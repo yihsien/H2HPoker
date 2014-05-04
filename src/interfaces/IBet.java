@@ -2,8 +2,8 @@ package interfaces;
 
 public interface IBet {
 
-	public void updateBet();
+	public void updateBet(int amount);
 	
-	public IBet getBet();
+	public int getBet();
 	
 }
