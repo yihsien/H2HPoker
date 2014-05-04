@@ -25,10 +25,14 @@ public class HPlayer implements IPlayer {
 		return 0;
 	}
 	
-	private int getChoice(IBet bet) {
-		int currentBet = bet.getBet();
+	private int getChoice(int currentBet) {
+		if(money<currentBet)
+			System.out.println("Fold(1), All-in(5)");
+		else if(money==currentBet)
+			System.out.println("Fold(1), All-in(5)");
+		else if((money-currentBet)<currentBet)
 		System.out.println("Fold(1), Check(2), Call(3)," +
-				" Raise("+currentBet+"-"+money+")");
+				" Raise(0-"+(money-currentBet)+")");
 		System.out.print("Please enter you bet: ");
 		Scanner reader = new Scanner(System.in);
 		return reader.nextInt();
