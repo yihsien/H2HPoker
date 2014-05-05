@@ -87,6 +87,12 @@ public class Dealer {
         return this.decideWinner(p1, p2);
     }
     
+    /**
+     * Decide the winner based upon the 2 cards in hand the 5 on the table
+     * @param p1
+     * @param p2
+     * @return the winning player, null in case of tie
+     */
     private IPlayer decideWinner(IPlayer p1, IPlayer p2) {
         p1.getHand().addAll(this.table_cards.getCards());
         p2.getHand().addAll(this.table_cards.getCards());
@@ -106,8 +112,8 @@ public class Dealer {
         } else if (tie_breaker == -1) {
             return p2;
         }
-        System.out.println("TIE: should split pot");
-        return p1;
+        // null indicates tie
+        return null;
     }
 
     /**
@@ -294,7 +300,14 @@ public class Dealer {
         		dealer.blindBet(computer, player, smallBlind);
         		winner = dealer.playRound(computer, player);
         	}
-            winner.addMoney(dealer.pot.getMoney());
+        	// handle tie
+        	if (winner == null) {
+        	    int half = dealer.pot.getMoney()/2;
+        	    player.addMoney(half);
+        	    computer.addMoney(dealer.pot.getMoney() - half);
+        	} else {
+        	    winner.addMoney(dealer.pot.getMoney());
+        	}
             if (dealer.secondPotOwner != null) {
                 dealer.secondPotOwner.addMoney(dealer.secondPotValue);
             }
