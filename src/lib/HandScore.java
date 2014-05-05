@@ -228,14 +228,16 @@ public class HandScore implements IHandScore {
      */
     private int resolveHighCard(HandScore hand_score) {
         Card[] cards = hand_score.cards;
+        int count = 0;
         for (int i = this.cards.length - 1, j = cards.length - 1;
-                i >= 2 && j >= 2;
+                i >= 0 && j >= 0 && count <= 5;
                 i--, j--) {
             int value1 = this.cards[i].getValue();
             int value2 = cards[j].getValue();
             if (value1 != value2) {
                 return (int)Math.signum(value1 - value2);
             }
+            count++;
         }
         return 0;
     }
