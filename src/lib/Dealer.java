@@ -31,6 +31,14 @@ public class Dealer {
         bet = new Bet();
         pot = new Pot();
     }
+    
+    public void clear() {
+        this.table_cards.clear();
+        this.pot.clear();
+        human.clear();
+        computer.clear();
+        bet.clear();
+    }
 
     /**
      * Runs a token round between the two players and returns the winner
@@ -39,9 +47,6 @@ public class Dealer {
      * @return
      */
     public IPlayer playRound(IPlayer p1, IPlayer p2) {
-        this.table_cards.clear();
-        p1.clear();
-        p2.clear();
         this.dealCards(p1, p2, deck);
         Stage stage = Stage.PRE_FLOP;
         while (stage != Stage.SHOW) {
@@ -79,6 +84,8 @@ public class Dealer {
     private IPlayer decideWinner(IPlayer p1, IPlayer p2) {
         Scores p1_score = new HandScore(p1.getHand()).getHandScore();
         Scores p2_score = new HandScore(p2.getHand()).getHandScore();
+        System.out.println(p1.getName() + "'s Score: " + p1_score.toString());
+        System.out.println(p2.getName() + "'s Score: " + p2_score.toString());
         if (p1_score.getValue() > p2_score.getValue()) {
             return p1;
         } else if (p1_score.getValue() < p2_score.getValue()) {
@@ -255,7 +262,7 @@ public class Dealer {
         		winner = dealer.playRound(computer, player);
         	}
             winner.addMoney(dealer.pot.getMoney());
-            dealer.pot.clear();
+            dealer.clear();
 
         	System.out.println("Round " + round + " winner: "
         	        + winner.getName());
