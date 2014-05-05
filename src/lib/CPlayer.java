@@ -7,6 +7,7 @@ import java.util.*;
 public class CPlayer implements IPlayer {
 
 	private int money;
+	private boolean hasPlayedBet = false;
 	private ArrayList<ICard> hand = new ArrayList<ICard>();
 	
 	@Override
@@ -84,6 +85,17 @@ public class CPlayer implements IPlayer {
     @Override
     public void clear() {
         hand = new ArrayList<ICard>();
+        this.hasPlayedBet = false;
+    }
+
+    @Override
+    public boolean hasPlacedBet() {
+        return this.hasPlayedBet;
+    }
+
+    @Override
+    public void placeBet(boolean doPlaceBet) {
+        this.hasPlayedBet = doPlaceBet;
     }
 
 }

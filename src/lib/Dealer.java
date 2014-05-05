@@ -82,6 +82,8 @@ public class Dealer {
     }
     
     private IPlayer decideWinner(IPlayer p1, IPlayer p2) {
+        p1.getHand().addAll(this.table_cards.getCards());
+        p2.getHand().addAll(this.table_cards.getCards());
         Scores p1_score = new HandScore(p1.getHand()).getHandScore();
         Scores p2_score = new HandScore(p2.getHand()).getHandScore();
         System.out.println(p1.getName() + "'s Score: " + p1_score.toString());
@@ -103,19 +105,21 @@ public class Dealer {
      */
     private IPlayer conductBets(IPlayer p1, IPlayer p2) {
         bet.clear();
+        int sign = 1;
         do {
             System.out.println("Bet: " + bet.getBet());
-            IPlayer non_folder = this.handleGetBet(p1, p2, 1);
+            IPlayer non_folder = this.handleGetBet(p1, p2, sign);
             if (non_folder != null) {
                 return non_folder;
             }
-            System.out.println("Bet: " + bet.getBet());
-            non_folder = this.handleGetBet(p2, p1, -1);
-            if (non_folder != null) {
-                return non_folder;
-            }
-            System.out.println("Bet: " + bet.getBet());
-        } while(bet.getBet() != 0 && p1.getMoney() != 0 && p2.getMoney() != 0);
+            p1.placeBet(true);
+            IPlayer tmp = p1;
+            p1 = p2;
+            p2 = tmp;
+            sign *= -1;
+        } while(bet.getBet() != 0 || !p1.hasPlacedBet() || !p2.hasPlacedBet());
+        p1.placeBet(false);
+        p2.placeBet(false);
         return null;
     }
     

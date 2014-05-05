@@ -4,6 +4,10 @@ import java.util.*;
 public interface IPlayer {
 
     public String getName();
+    
+    public boolean hasPlacedBet();
+    
+    public void placeBet(boolean doPlaceBet);
 
     public void addCard(ICard card);
 
