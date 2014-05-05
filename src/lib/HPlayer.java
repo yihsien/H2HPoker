@@ -1,24 +1,9 @@
 package lib;
 
-import interfaces.ICard;
-import interfaces.IPlayer;
+
 import java.util.*;
 
-public class HPlayer implements IPlayer {
-
-	private int money;
-    private boolean hasPlayedBet = false;
-	private ArrayList<ICard> hand = new ArrayList<ICard>();
-	
-	@Override
-	public ArrayList<ICard> getHand() {
-		return hand;
-	}
-
-	@Override
-	public int getMoney() {
-		return money;
-	}
+public class HPlayer extends Player {
 
 	@Override
 	public int getBet(int bet) {
@@ -63,45 +48,16 @@ public class HPlayer implements IPlayer {
 	
 	private int getChoice(int currentBet) {
 	    System.out.println("Current Bet: " + currentBet);
-		System.out.println("Fold(1), Check(2), Call(3), All-In(4)" +
+		System.out.println("Fold(1), Check(2), Call(3), All-In(4)," +
 				" Raise(0-"+(money-currentBet)+")");
 		System.out.print("Please enter you bet: ");
 		Scanner reader = new Scanner(System.in);
 		return reader.nextInt();
 	}
-	
-	public void addMoney(int amount) { 
-		money += amount;
-	}
-	
-	public void subMoney(int amount) {
-		money -= amount;
-	}
 
-    @Override
-    public void addCard(ICard card) {
-        hand.add(card);
-    }
 
     @Override
     public String getName() {
         return "human";
     }
-
-    @Override
-    public void clear() {
-        hand = new ArrayList<ICard>();
-        this.hasPlayedBet = false;
-    }
-
-    @Override
-    public boolean hasPlacedBet() {
-        return this.hasPlayedBet;
-    }
-
-    @Override
-    public void placeBet(boolean doPlaceBet) {
-        this.hasPlayedBet = doPlaceBet;
-    }
-
 }
