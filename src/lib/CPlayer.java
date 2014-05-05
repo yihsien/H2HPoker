@@ -53,5 +53,5 @@ public class CPlayer extends Player {
     public String getName() {
         return "computer";
     }
-
+    
 }

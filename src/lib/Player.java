@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public abstract class Player implements IPlayer {
 	protected int money;
 	private ArrayList<ICard> hand = new ArrayList<ICard>();
+	private boolean hasPlacedBet = false;
 	
 	@Override
 	public ArrayList<ICard> getHand() {
@@ -39,4 +40,17 @@ public abstract class Player implements IPlayer {
     public void clear() {
         hand = new ArrayList<ICard>();
     }
+    
+
+
+    @Override
+    public boolean hasPlacedBet() {
+        return this.hasPlacedBet;
+    }
+
+    @Override
+    public void placeBet(boolean doPlaceBet) {
+        this.hasPlacedBet = doPlaceBet;
+    }
+
 }
