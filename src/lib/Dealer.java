@@ -206,9 +206,10 @@ public class Dealer {
     	System.out.println("Please decide the small blind amount: ");
     	Scanner reader = new Scanner(System.in);
     	smallBlind = reader.nextInt();
-    	System.out.println("Please enter your starting money (Computer will match you");
-    	player.addMoney(reader.nextInt());
-    	computer.addMoney(reader.nextInt());
+    	System.out.println("Please enter your starting money (Computer will match you)");
+    	int startingMoney = reader.nextInt();
+    	player.addMoney(startingMoney);
+    	computer.addMoney(startingMoney);
        
         int pickedNum = rand.nextInt(1)+1;
         boolean dealerButton = true;
