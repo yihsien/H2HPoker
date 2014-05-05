@@ -99,8 +99,14 @@ public class Dealer {
         } else if (p1_score.getValue() < p2_score.getValue()) {
             return p2;
         }
-        // random winner
-        System.out.println("Random Winner");
+        int tie_breaker = new HandScore(p1.getHand()).resolveTie(
+                new HandScore(p2.getHand()), p1_score);
+        if (tie_breaker == 1) {
+            return p1;
+        } else if (tie_breaker == -1) {
+            return p2;
+        }
+        System.out.println("TIE: should split pot");
         return p1;
     }
 
@@ -296,6 +302,7 @@ public class Dealer {
         	dealerButton = !dealerButton;
         	round++;
         }
+        reader.close();
     }
 
 }

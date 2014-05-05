@@ -20,10 +20,12 @@ public class HandScore implements IHandScore {
     
     public HandScore(ArrayList<ICard> hand) {
         this.hand = hand;
+    }
+    
+    private void setUp() {
         this.cards = this.hand.toArray(new Card[this.hand.size()]);
         Arrays.sort(cards);
         computeMaps();
-        this.hand_score = this.computeHandScore();
     }
     
     private void computeMaps() {
@@ -73,6 +75,8 @@ public class HandScore implements IHandScore {
     }
 
     public Scores getHandScore() {
+        this.setUp();
+        this.hand_score = this.computeHandScore();
         return this.hand_score;
     }
     
@@ -190,5 +194,302 @@ public class HandScore implements IHandScore {
             }
         }
         return this.hasFlush();
+    }
+    
+    /**
+     * Resolves the winner from the hand_score based on provided Scores
+     * @param hand_score
+     * @return 1 if this is the winner, -1 if other is the winner, 0 - tie
+     */
+    public int resolveTie(HandScore hand_score, Scores score) {
+        this.setUp();
+        hand_score.setUp();
+        switch (score) {
+        case HIGH_CARD: return this.resolveHighCard(hand_score);
+        case PAIR: return this.resolvePair(hand_score);
+        case TWO_PAIRS: return this.resolveTwoPairs(hand_score);
+        case THREE_KIND: return this.resolveThreeOfAKind(hand_score);
+        case STRAIGHT: return this.resolveStraight(hand_score);
+        case FLUSH: return this.resolveFlush(hand_score);
+        case FULL_HOUSE: return this.resolveFullHouse(hand_score);
+        case FOUR_KIND: return this.resolveFourOfAKind(hand_score);
+        case STRAIGHT_FLUSH: return this.resolveStraightFlush(hand_score);
+        case ROYAL_FLUSH: return this.resolveRoyalFlush(hand_score);
+        default:
+            break;
+        }
+        return 1;
+    }
+    
+    /**
+     * Resolves the winner from the hand_score based on HIGH_CARD
+     * @param hand_score
+     * @return 1 if this is the winner, -1 if other is the winner, 0 - tie
+     */
+    private int resolveHighCard(HandScore hand_score) {
+        Card[] cards = hand_score.cards;
+        for (int i = this.cards.length - 1, j = cards.length - 1;
+                i >= 0 && j >= 0;
+                i--, j--) {
+            int value1 = this.cards[i].getValue();
+            int value2 = cards[j].getValue();
+            if (value1 != value2) {
+                return (int)Math.signum(value1 - value2);
+            }
+        }
+        return 0;
+    }
+    
+    /**
+     * Resolves the winner from the hand_score based on PAIR
+     * @param hand_score
+     * @return 1 if this is the winner, -1 if other is the winner, 0 - tie
+     */
+    private int resolvePair(HandScore hand_score) {
+        Card[] cards = hand_score.cards;
+        HashMap<Integer, Integer> value_map = hand_score.valueMap;
+        for (int i = this.cards.length - 1, j = cards.length - 1;
+                i >= 0 && j >= 0;) {
+            int value1 = this.cards[i].getValue();
+            int value2 = cards[j].getValue();
+            if (valueMap.get(value1) != 2) {
+                i--;
+                continue;
+            } else if (value_map.get(value2) != 2) {
+                j--;
+                continue;
+            }
+            if (value1 != value2) {
+                return (int)Math.signum(value1 - value2);
+            } else {
+                i--;
+                j--;
+                continue;
+            }
+        }
+        // tie in both the hands
+        return this.resolveTie(hand_score, Scores.HIGH_CARD);
+    }
+
+    /**
+     * Resolves the winner from the hand_score based on TWO_PAIRS
+     * @param hand_score
+     * @return 1 if this is the winner, -1 if other is the winner, 0 - tie
+     */
+    private int resolveTwoPairs(HandScore hand_score) {
+        return this.resolvePair(hand_score);
+    }
+    
+    /**
+     * Resolves the winner from the hand_score based on THREE_KIND
+     * @param hand_score
+     * @return 1 if this is the winner, -1 if other is the winner, 0 - tie
+     */
+    private int resolveThreeOfAKind(HandScore hand_score) {
+        Card[] cards = hand_score.cards;
+        HashMap<Integer, Integer> value_map = hand_score.valueMap;
+        for (int i = this.cards.length - 1, j = cards.length - 1;
+                i >= 0 && j >= 0;) {
+            int value1 = this.cards[i].getValue();
+            int value2 = cards[j].getValue();
+            if (valueMap.get(value1) != 3) {
+                i--;
+                continue;
+            } else if (value_map.get(value2) != 3) {
+                j--;
+                continue;
+            }
+            if (value1 != value2) {
+                return (int)Math.signum(value1 - value2);
+            } else {
+                i--;
+                j--;
+                continue;
+            }
+        }
+        // tie in both the hands
+        return this.resolveTie(hand_score, Scores.HIGH_CARD);
+    }
+    
+    private Card getStraightHighCard(HandScore hand_score) {
+        if (!hand_score.hasStraight()) {
+            throw new IllegalArgumentException("Hand does not have a " +
+                    "STRAIGHT. It has " + hand_score.getHandScore().toString());
+        }
+        Card[] cards = hand_score.cards;
+        Card high_card = null;
+        
+        int prevIndex = cards.length - 1;
+        int count = 1;
+        for (int i = cards.length - 2; i >= 0 && count != 5; i--) {
+            int diff = cards[prevIndex].getValue() - cards[i].getValue();
+            // ignore duplicates
+            if (diff == 0) {
+                continue;
+            }
+            if (diff == 1) {
+                if (high_card == null) {
+                    high_card = cards[prevIndex];
+                }
+                count++;
+            } else {
+                // reset count so restart comparing
+                count = 1;
+                high_card = null;
+            }
+            prevIndex = i;
+        }
+        if (count == 5) {
+            return high_card;
+        }
+        
+        // Only possibility left - A 2 3 4 5
+        for (int i = 0; i < cards.length; i++) {
+            if (cards[i].getValue() == 5) {
+                return cards[i];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Resolves the winner from the hand_score based on STRAIGHT
+     * @param hand_score
+     * @return 1 if this is the winner, -1 if other is the winner, 0 - tie
+     */
+    private int resolveStraight(HandScore hand_score) {
+        Card high_card1 = this.getStraightHighCard(this);
+        Card high_card2 = this.getStraightHighCard(hand_score);
+        
+        if (high_card1.getValue() != high_card2.getValue()) {
+            return (int)Math.signum(
+                    high_card1.getValue() - high_card2.getValue());
+        }
+        return 0;
+    }
+
+    /**
+     * Resolves the winner from the hand_score based on FLUSH
+     * @param hand_score
+     * @return 1 if this is the winner, -1 if other is the winner, 0 - tie
+     */
+    private int resolveFlush(HandScore hand_score) {
+        Suit flush_suit = null;
+        for (Suit suit : this.suitMap.keySet()) {
+            if (this.suitMap.get(suit) >= 5) {
+                flush_suit = suit;
+                break;
+            }
+        }
+        @SuppressWarnings("unchecked")
+        HandScore hs1 = new HandScore((ArrayList<ICard>) this.hand.clone());
+        @SuppressWarnings("unchecked")
+        HandScore hs2 = new HandScore(
+                (ArrayList<ICard>) hand_score.hand.clone());
+        for (ICard card : this.hand) {
+            if (card.getSuit() != flush_suit) {
+                hs1.hand.remove(card);
+            }
+        }
+        for (ICard card : hand_score.hand) {
+            if (card.getSuit() != flush_suit) {
+                hs2.hand.remove(card);
+            }
+        }
+        return hs1.resolveTie(hs2, Scores.HIGH_CARD);
+    }
+    
+    /**
+     * Resolves the winner from the hand_score based on FULL_HOUSE
+     * @param hand_score
+     * @return 1 if this is the winner, -1 if other is the winner, 0 - tie
+     */
+    private int resolveFullHouse(HandScore hand_score) {
+        HashMap<Integer, Integer> value_map = hand_score.valueMap;
+        int value1_3 = -1;
+        int value1_2 = -1;
+        for (Integer key : this.valueMap.keySet()) {
+            if (valueMap.get(key) == 3) {
+                if (value1_3 == -1) {
+                    value1_3 = key;
+                } else {
+                    value1_2 = Math.max(value1_2, Math.min(value1_3, key));
+                    value1_3 = Math.max(value1_3, key);
+                }
+            } else if (valueMap.get(key) == 2) {
+                value1_2 = Math.max(value1_2, key);;
+            }
+        }
+        
+        int value2_3 = -1;
+        int value2_2 = -1;
+        for (Integer key : value_map.keySet()) {
+            if (value_map.get(key) == 3) {
+                if (value2_3 == -1) {
+                    value2_3 = key;
+                } else {
+                    value2_2 = Math.max(value2_2, Math.min(value2_3, key));
+                    value2_3 = Math.max(value2_3, key);
+                }
+            } else if (value_map.get(key) == 2) {
+                value2_2 = Math.max(value2_2, key);;
+            }
+        }
+        
+        if (value1_3 != value2_3) {
+            return (int)Math.signum(value1_3 - value2_3);
+        } else if (value1_2 != value2_2) {
+            return (int)Math.signum(value1_2 - value2_2);
+        }
+        return 0;
+    }
+
+    /**
+     * Resolves the winner from the hand_score based on FOUR_KIND
+     * @param hand_score
+     * @return 1 if this is the winner, -1 if other is the winner, 0 - tie
+     */
+    private int resolveFourOfAKind(HandScore hand_score) {
+        Card[] cards = hand_score.cards;
+        HashMap<Integer, Integer> value_map = hand_score.valueMap;
+        int value1 = 0;
+        int value2 = 0;
+        for (int i = this.cards.length - 1, j = cards.length - 1;
+                i >= 0 && j >= 0;) {
+            value1 = this.cards[i].getValue();
+            value2 = cards[j].getValue();
+            if (valueMap.get(value1) != 4) {
+                i--;
+                continue;
+            } else if (value_map.get(value2) != 4) {
+                j--;
+                continue;
+            }
+            if (value1 != value2) {
+                return (int)Math.signum(value1 - value2);
+            }
+            break;
+        }
+        throw new IllegalArgumentException("Cannot be a tie in 4 "+ 
+                "of a kind: value1 = " + value1 + ", value2 = " + value2);
+    }
+
+    /**
+     * Resolves the winner from the hand_score based on STRAIGHT_FLUSH
+     * @param hand_score
+     * @return 1 if this is the winner, -1 if other is the winner, 0 - tie
+     */
+    private int resolveStraightFlush(HandScore hand_score) {
+        return this.resolveTie(hand_score, Scores.STRAIGHT);
+    }
+    
+    /**
+     * Resolves the winner from the hand_score based on ROYAL_FLUSH
+     * @param hand_score
+     * @return 1 if this is the winner, -1 if other is the winner, 0 - tie
+     */
+    private int resolveRoyalFlush(HandScore hand_score) {
+        // only possibility is a tie
+        return 0;
     }
 }
