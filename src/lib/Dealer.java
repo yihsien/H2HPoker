@@ -2,6 +2,7 @@ package lib;
 
 import java.util.ArrayList;
 
+import enums.Scores;
 import enums.Stage;
 
 import interfaces.IBet;
@@ -60,7 +61,13 @@ public class Dealer {
     }
     
     private IPlayer decideWinner(IPlayer p1, IPlayer p2) {
-        // TODO Auto-generated method stub
+        Scores p1_score = new HandScore(p1.getHand()).getHandScore();
+        Scores p2_score = new HandScore(p2.getHand()).getHandScore();
+        if (p1_score.getValue() > p2_score.getValue()) {
+            return p1;
+        } else if (p1_score.getValue() < p2_score.getValue()) {
+            return p2;
+        }
         return null;
     }
 

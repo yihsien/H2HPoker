@@ -1,6 +1,7 @@
 package lib;
 
 import interfaces.ICard;
+import interfaces.IHandScore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +9,7 @@ import java.util.Arrays;
 import enums.Scores;
 import enums.Suit;
 
-public class HandScore {
+public class HandScore implements IHandScore {
 
     private ArrayList<ICard> hand;
     private Card[] cards;
