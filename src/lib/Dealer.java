@@ -39,6 +39,7 @@ public class Dealer {
      * @return
      */
     public IPlayer playRound(IPlayer p1, IPlayer p2) {
+        this.table_cards.clear();
         this.dealCards(p1, p2, deck);
         Stage stage = Stage.PRE_FLOP;
         while (stage != Stage.SHOW) {
@@ -101,7 +102,7 @@ public class Dealer {
                 return non_folder;
             }
             System.out.println("Bet: " + bet.getBet());
-        } while(bet.getBet() != 0);
+        } while(bet.getBet() != 0 && p1.getMoney() != 0 && p2.getMoney() != 0);
         return null;
     }
     
@@ -183,6 +184,7 @@ public class Dealer {
     public void blindBet(IPlayer p1, IPlayer p2, int smallBlind){
         this.printGameStatus();
         System.out.println("Adding the blinds");
+        System.out.println("Small: " + p1.getName() + "\nBig: " + p2.getName());
 
     	if(p1.getMoney()<smallBlind && p2.getMoney()>=smallBlind*2){
             this.pot.addMoney(p1.getMoney() * 2);
