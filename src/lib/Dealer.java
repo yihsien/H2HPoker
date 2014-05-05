@@ -187,13 +187,17 @@ public class Dealer {
      */
     public static void main(String[] args) throws Exception {
     	int smallBlind;
-    	System.out.println("Please decide the small blind amount: ");
-    	Scanner reader = new Scanner(System.in);
-    	smallBlind = reader.nextInt();
-        Dealer dealer = new Dealer();
+    	Dealer dealer = new Dealer();
         Random rand = new Random();
         IPlayer player = dealer.human;
         IPlayer computer = dealer.computer;
+    	System.out.println("Please decide the small blind amount: ");
+    	Scanner reader = new Scanner(System.in);
+    	smallBlind = reader.nextInt();
+    	System.out.println("Please enter your starting money (Computer will match you");
+    	player.addMoney(reader.nextInt());
+    	computer.addMoney(reader.nextInt());
+       
         int pickedNum = rand.nextInt(1)+1;
         boolean dealerButton = true;
         if(pickedNum == 0)
