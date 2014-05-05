@@ -12,5 +12,7 @@ public interface ITableCards {
 
     public ArrayList<ICard> getCards();
 
+    public void updateStage();
+
     public void clear();
 }
