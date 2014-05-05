@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import enums.Scores;
 import enums.Stage;
 
 import interfaces.IBet;
@@ -41,7 +42,12 @@ public class Dealer {
         this.dealCards(p1, p2, deck);
         Stage stage = Stage.PRE_FLOP;
         while (stage != Stage.SHOW) {
-            IPlayer non_folder = this.conductBets(p1, p2);
+            IPlayer non_folder = null;
+            if (stage == Stage.PRE_FLOP) {
+                non_folder = this.conductBets(p1, p2);
+            } else {
+                non_folder = this.conductBets(p1, p2);
+            }
             if (non_folder != null) {
                 return non_folder;
             }
@@ -62,7 +68,13 @@ public class Dealer {
     }
     
     private IPlayer decideWinner(IPlayer p1, IPlayer p2) {
-        // TODO Auto-generated method stub
+        Scores p1_score = new HandScore(p1.getHand()).getHandScore();
+        Scores p2_score = new HandScore(p2.getHand()).getHandScore();
+        if (p1_score.getValue() > p2_score.getValue()) {
+            return p1;
+        } else if (p1_score.getValue() < p2_score.getValue()) {
+            return p2;
+        }
         return null;
     }
 
@@ -205,19 +217,22 @@ public class Dealer {
         else
         	dealerButton = false;
         
+        int round = 0;
         while(!dealer.gameEnd(player, computer)){
+            IPlayer winner = null;
         	if(dealerButton){
         		dealer.blindBet(player, computer, smallBlind);
-        		dealer.playRound(player, computer);
+        		winner = dealer.playRound(player, computer);
         	}
         	else{
         		dealer.blindBet(computer, player, smallBlind);
-        		dealer.playRound(computer, player);
+        		winner = dealer.playRound(computer, player);
         	}
-        	
+        	System.out.println("Round " + round + " winner: "
+        	        + winner.getName());
         	dealerButton = !dealerButton;
+        	round++;
         }
-        
     }
 
 }
