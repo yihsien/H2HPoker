@@ -42,14 +42,16 @@ public class Dealer {
         this.dealCards(p1, p2, deck);
         Stage stage = Stage.PRE_FLOP;
         while (stage != Stage.SHOW) {
-            IPlayer non_folder = null;
-            if (stage == Stage.PRE_FLOP) {
-                non_folder = this.conductBets(p1, p2);
-            } else {
-                non_folder = this.conductBets(p1, p2);
-            }
-            if (non_folder != null) {
-                return non_folder;
+            if (p1.getMoney() != 0 && p2.getMoney() != 0) {
+                IPlayer non_folder = null;
+                if (stage == Stage.PRE_FLOP) {
+                    non_folder = this.conductBets(p1, p2);
+                } else {
+                    non_folder = this.conductBets(p1, p2);
+                }
+                if (non_folder != null) {
+                    return non_folder;
+                }
             }
             if (stage == Stage.PRE_FLOP) {
                 table_cards.openFlop(deck);
