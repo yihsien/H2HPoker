@@ -62,10 +62,11 @@ public class TestResolveTies {
                     Suit.HEARTS, Suit.SPADES, Suit.SPADES};
         hs1 = this.getHandScore(values1, suits1);
         hs2 = this.getHandScore(values2, suits2);
-        if (hs1.resolveTie(hs2, Scores.HIGH_CARD) != 1) {
+        if (hs1.resolveTie(hs2, Scores.HIGH_CARD) != 0) {
             throw new Exception("Failed: " +
                     hs1.resolveTie(hs2, Scores.HIGH_CARD));
         }
+
         System.out.println("HighCard PASSED");
     }
     
