@@ -25,6 +25,15 @@ public class Card implements ICard, Comparable<ICard> {
     }
     
     @Override
+    public boolean equals(Object obj) {
+        ICard card = (ICard)obj;
+        if (this.getValue() == card.getValue() &&
+            this.getSuit() == card.getSuit())
+            return true;
+        return false;
+    }
+    
+    @Override
     public int compare(ICard card1, ICard card2) {
         return (card1.getValue() - card2.getValue());
     }
