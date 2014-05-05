@@ -62,7 +62,7 @@ public class HPlayer implements IPlayer {
 	
 	private int getChoice(int currentBet) {
 	    System.out.println("Current Bet: " + currentBet);
-		System.out.println("Fold(1), Check(2), Call(3), All-In(4)" +
+		System.out.println("Fold(1), Check(2), Call(3), All-In(4)," +
 				" Raise(0-"+(money-currentBet)+")");
 		System.out.print("Please enter you bet: ");
 		Scanner reader = new Scanner(System.in);
