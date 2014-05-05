@@ -213,19 +213,22 @@ public class Dealer {
         else
         	dealerButton = false;
         
+        int round = 0;
         while(!dealer.gameEnd(player, computer)){
+            IPlayer winner = null;
         	if(dealerButton){
         		dealer.blindBet(player, computer, smallBlind);
-        		dealer.playRound(player, computer);
+        		winner = dealer.playRound(player, computer);
         	}
         	else{
         		dealer.blindBet(computer, player, smallBlind);
-        		dealer.playRound(computer, player);
+        		winner = dealer.playRound(computer, player);
         	}
-        	
+        	System.out.println("Round " + round + " winner: "
+        	        + winner.getName());
         	dealerButton = !dealerButton;
+        	round++;
         }
-        
     }
 
 }

@@ -3,6 +3,8 @@ import java.util.*;
 
 public interface IPlayer {
 
+    public String getName();
+
     public void addCard(ICard card);
 
 	public ArrayList<ICard> getHand();

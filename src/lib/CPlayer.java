@@ -71,4 +71,9 @@ public class CPlayer implements IPlayer {
     	hand.add(card);
     }
 
+    @Override
+    public String getName() {
+        return "computer";
+    }
+
 }

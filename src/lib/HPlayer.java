@@ -81,4 +81,9 @@ public class HPlayer implements IPlayer {
         hand.add(card);
     }
 
+    @Override
+    public String getName() {
+        return "human";
+    }
+
 }
