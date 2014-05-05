@@ -56,12 +56,15 @@ public class Dealer {
             }
             if (stage == Stage.PRE_FLOP) {
                 table_cards.openFlop(deck);
+                table_cards.updateStage();
                 stage = Stage.PRE_TURN;
             } else if (stage == Stage.PRE_TURN) {
                 table_cards.openTurn(deck);
+                table_cards.updateStage();
                 stage = Stage.PRE_RIVER;
             } else if (stage == Stage.PRE_RIVER) {
                 table_cards.openRiver(deck);
+                table_cards.updateStage();
                 stage = Stage.PRE_SHOW;
             } else if (stage == Stage.PRE_SHOW) {
                 stage = Stage.SHOW;

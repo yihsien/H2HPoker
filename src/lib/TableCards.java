@@ -54,4 +54,14 @@ public class TableCards implements ITableCards {
         this.cards.clear();
         this.stage = Stage.PRE_FLOP;
     }
+
+    @Override
+    public void updateStage() {
+        switch(stage) {
+        case PRE_FLOP: stage = Stage.PRE_TURN; break;
+        case PRE_TURN: stage = Stage.PRE_RIVER; break;
+        case PRE_RIVER: stage = Stage.PRE_SHOW; break;
+        default: break;
+        }
+    }
 }
