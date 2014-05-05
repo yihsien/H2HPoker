@@ -118,13 +118,18 @@ public class Dealer {
      * @return
      */
     private IPlayer conductBets(IPlayer p1, IPlayer p2) {
+        // set up
         bet.clear();
         int sign = 1;
+        p1.placeBet(false);
+        p2.placeBet(false);
         do {
             System.out.println("Bet: " + bet.getBet());
             // if the same player is asked to play again when the other one
             // runs out of money => break
             if (Math.signum(bet.getBet()) == Math.signum(sign)) {
+                break;
+            } else if (p1.getMoney() == 0) {
                 break;
             }
             IPlayer non_folder = this.handleGetBet(p1, p2, sign);
@@ -137,8 +142,6 @@ public class Dealer {
             p2 = tmp;
             sign *= -1;
         } while(bet.getBet() != 0 || !p1.hasPlacedBet() || !p2.hasPlacedBet());
-        p1.placeBet(false);
-        p2.placeBet(false);
         return null;
     }
     
