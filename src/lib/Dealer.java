@@ -175,8 +175,23 @@ public class Dealer {
     }
     
     public void blindBet(IPlayer p1, IPlayer p2, int smallBlind){
-    	p1.subMoney(smallBlind);
-    	p2.subMoney(smallBlind*2);
+    	if(p1.getMoney()<smallBlind && p2.getMoney()>=smallBlind*2){
+    		p1.subMoney(p1.getMoney());
+    		p2.subMoney(p1.getMoney());
+    	}
+    	else if(p1.getMoney()>=smallBlind && p2.getMoney()<smallBlind*2){
+    		p1.subMoney(smallBlind);
+    		p2.subMoney(p2.getMoney());
+    	}
+    	else if(p1.getMoney()<smallBlind && p2.getMoney()<smallBlind*2){
+    		int subAmount = (p1.getMoney()<=p2.getMoney())?p1.getMoney():p2.getMoney();
+    		p1.subMoney(subAmount);
+    		p2.subMoney(subAmount);
+    	}
+    	else{
+    		p1.subMoney(smallBlind);
+    		p2.subMoney(smallBlind*2);
+    	}
     }
 
     /**
@@ -200,16 +215,17 @@ public class Dealer {
         
         while(!dealer.gameEnd(player, computer)){
         	if(dealerButton){
-        		dealer.playRound(player, computer);
         		dealer.blindBet(player, computer, smallBlind);
+        		dealer.playRound(player, computer);
         	}
         	else{
-        		dealer.playRound(computer, player);
         		dealer.blindBet(computer, player, smallBlind);
+        		dealer.playRound(computer, player);
         	}
         	
         	dealerButton = !dealerButton;
         }
+        
     }
 
 }
