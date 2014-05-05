@@ -24,13 +24,13 @@ public class CPlayer implements IPlayer {
 		int finalBet;
 		Random rand = new Random();
 		while(true){
-			int playerBet = rand.nextInt(5)+1;;
+			int playerBet = rand.nextInt(10)+1;;
 			if(playerBet == 1){
 				finalBet = Bet.FOLD;
 				System.out.println("Computer play: Fold");
 				break;
 			}
-			else if(playerBet == 2){
+			else if(playerBet <= 3){
 				if(bet!=0){
 					continue;
 				}
@@ -38,7 +38,7 @@ public class CPlayer implements IPlayer {
 				System.out.println("Computer play: Check");
 				break;
 			}
-			else if(playerBet == 3){
+			else if(playerBet <= 7){
 				if(money<bet){
 					continue;
 				}
@@ -46,7 +46,7 @@ public class CPlayer implements IPlayer {
 				System.out.println("Computer play: Call");
 				break;
 			}
-			else if(playerBet == 4){
+			else if(playerBet <= 8){
 				finalBet = Bet.ALLIN;
 				System.out.println("Computer play: ALL-In");
 				break;
