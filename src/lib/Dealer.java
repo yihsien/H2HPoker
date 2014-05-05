@@ -22,6 +22,8 @@ public class Dealer {
     private IDeck deck;
     private IBet bet;
     private IPot pot;
+    private int secondPotValue;
+    private IPlayer secondPotOwner;
     
     public Dealer() {
     	human = new HPlayer();
@@ -30,6 +32,8 @@ public class Dealer {
         deck = new Deck();
         bet = new Bet();
         pot = new Pot();
+        this.secondPotOwner = null;
+        this.secondPotValue = 0;
     }
     
     public void clear() {
@@ -38,6 +42,8 @@ public class Dealer {
         human.clear();
         computer.clear();
         bet.clear();
+        this.secondPotOwner = null;
+        this.secondPotValue = 0;
     }
 
     /**
@@ -93,7 +99,9 @@ public class Dealer {
         } else if (p1_score.getValue() < p2_score.getValue()) {
             return p2;
         }
-        return null;
+        // random winner
+        System.out.println("Random Winner");
+        return p1;
     }
 
     /**
@@ -108,6 +116,11 @@ public class Dealer {
         int sign = 1;
         do {
             System.out.println("Bet: " + bet.getBet());
+            // if the same player is asked to play again when the other one
+            // runs out of money => break
+            if (Math.signum(bet.getBet()) == Math.signum(sign)) {
+                break;
+            }
             IPlayer non_folder = this.handleGetBet(p1, p2, sign);
             if (non_folder != null) {
                 return non_folder;
@@ -158,9 +171,12 @@ public class Dealer {
         bet.updateBet(bet.getBet() + p1_money * sign);
         pot.addMoney(p1_money);
         p1.subMoney(p1_money);
-        int p2_back_money =
+        this.secondPotValue =
                 current_bet - p1_money > 0 ? current_bet - p1_money : 0;
-        p2.addMoney(p2_back_money);
+        if (secondPotValue != 0) {
+            pot.subMoney(secondPotValue);
+            this.secondPotOwner = p2;
+        }
     }
 
     private void handleRaise(IPlayer player, int bet_value, int sign) {
@@ -178,6 +194,10 @@ public class Dealer {
         ArrayList<ICard> cards = this.table_cards.getCards();
         System.out.println(cards.toString());
         System.out.println("Pot Money => " + this.pot.getMoney());
+        if (this.secondPotValue != 0) {
+            System.out.println("2nd Pot Money => " + this.secondPotValue);
+            System.out.println("2nd Pot Owner => " + secondPotOwner.getName());
+        }
         System.out.println("Computer's Money => " + this.computer.getMoney());
         System.out.println("Human's Money => " + this.human.getMoney());
         System.out.println("Computer's Hand: " +
@@ -266,6 +286,9 @@ public class Dealer {
         		winner = dealer.playRound(computer, player);
         	}
             winner.addMoney(dealer.pot.getMoney());
+            if (dealer.secondPotOwner != null) {
+                dealer.secondPotOwner.addMoney(dealer.secondPotValue);
+            }
             dealer.clear();
 
         	System.out.println("Round " + round + " winner: "

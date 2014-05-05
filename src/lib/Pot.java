@@ -23,4 +23,12 @@ public class Pot implements IPot {
     public void clear() {
         this.money = 0;
     }
+
+    @Override
+    public void subMoney(int money) {
+        if (money < 0) {
+            throw new IllegalStateException("Money cannot be negative.");
+        }
+        this.money -= money;
+    }
 }
