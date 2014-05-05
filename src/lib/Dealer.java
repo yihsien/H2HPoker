@@ -40,6 +40,8 @@ public class Dealer {
      */
     public IPlayer playRound(IPlayer p1, IPlayer p2) {
         this.table_cards.clear();
+        p1.clear();
+        p2.clear();
         this.dealCards(p1, p2, deck);
         Stage stage = Stage.PRE_FLOP;
         while (stage != Stage.SHOW) {
@@ -70,6 +72,7 @@ public class Dealer {
                 stage = Stage.SHOW;
             }
         }
+        this.printGameStatus();
         return this.decideWinner(p1, p2);
     }
     
@@ -166,6 +169,10 @@ public class Dealer {
         System.out.println("Pot Money => " + this.pot.getMoney());
         System.out.println("Computer's Money => " + this.computer.getMoney());
         System.out.println("Human's Money => " + this.human.getMoney());
+        System.out.println("Computer's Hand: " +
+                this.computer.getHand().toString());
+        System.out.println("Human's Hand: " +
+                this.human.getHand().toString());
         System.out.println("********************************");
     }
 

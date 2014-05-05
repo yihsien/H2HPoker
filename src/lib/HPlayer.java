@@ -87,4 +87,9 @@ public class HPlayer implements IPlayer {
         return "human";
     }
 
+    @Override
+    public void clear() {
+        hand = new ArrayList<ICard>();
+    }
+
 }

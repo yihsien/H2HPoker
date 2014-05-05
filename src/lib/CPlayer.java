@@ -81,4 +81,9 @@ public class CPlayer implements IPlayer {
         return "computer";
     }
 
+    @Override
+    public void clear() {
+        hand = new ArrayList<ICard>();
+    }
+
 }
