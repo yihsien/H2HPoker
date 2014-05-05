@@ -1,6 +1,8 @@
 package lib;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
 
 import enums.Scores;
 import enums.Stage;
@@ -22,7 +24,7 @@ public class Dealer {
     private IPot pot;
     
     public Dealer() {
-        human = new HPlayer();
+    	human = new HPlayer();
         computer = new CPlayer();
         table_cards = new TableCards();
         deck = new Deck();
@@ -31,7 +33,7 @@ public class Dealer {
     }
 
     /**
-     * Runs a poken round between the two players and returns the winner
+     * Runs a token round between the two players and returns the winner
      * @param p1
      * @param p2
      * @return
@@ -159,12 +161,50 @@ public class Dealer {
         p1.addCard(deck.dealCard());
         p2.addCard(deck.dealCard());
     }
+    
+    public boolean gameEnd(IPlayer p1, IPlayer p2){
+    	if(p1.getMoney() == 0 || p2.getMoney() == 0)
+    		return true;
+    	else
+    		return false;
+    }
+    
+    public void blindBet(IPlayer p1, IPlayer p2, int smallBlind){
+    	p1.subMoney(smallBlind);
+    	p2.subMoney(smallBlind*2);
+    }
 
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception {
+    	int smallBlind;
+    	System.out.println("Please decide the small blind amount: ");
+    	Scanner reader = new Scanner(System.in);
+    	smallBlind = reader.nextInt();
+        Dealer dealer = new Dealer();
+        Random rand = new Random();
+        IPlayer player = dealer.human;
+        IPlayer computer = dealer.computer;
+        int pickedNum = rand.nextInt(1)+1;
+        boolean dealerButton = true;
+        if(pickedNum == 0)
+        	dealerButton = true;
+        else
+        	dealerButton = false;
         
+        while(!dealer.gameEnd(player, computer)){
+        	if(dealerButton){
+        		dealer.playRound(player, computer);
+        		dealer.blindBet(player, computer, smallBlind);
+        	}
+        	else{
+        		dealer.playRound(computer, player);
+        		dealer.blindBet(computer, player, smallBlind);
+        	}
+        	
+        	dealerButton = !dealerButton;
+        }
     }
 
 }
