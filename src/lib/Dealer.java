@@ -226,7 +226,7 @@ public class Dealer {
     	player.addMoney(startingMoney);
     	computer.addMoney(startingMoney);
        
-        int pickedNum = rand.nextInt(1)+1;
+        int pickedNum = rand.nextInt(2);
         boolean dealerButton = true;
         if(pickedNum == 0)
         	dealerButton = true;

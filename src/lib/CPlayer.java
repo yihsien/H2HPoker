@@ -24,7 +24,7 @@ public class CPlayer implements IPlayer {
 		int finalBet;
 		Random rand = new Random();
 		while(true){
-			int playerBet = rand.nextInt(10)+1;;
+			int playerBet = rand.nextInt(10)+1;
 			if(playerBet == 1){
 				finalBet = Bet.FOLD;
 				System.out.println("Computer play: Fold");
