@@ -39,7 +39,7 @@ public class CPlayer implements IPlayer {
 				break;
 			}
 			else if(playerBet == 3){
-				if(money<bet){
+				if(money<bet || bet == 0){
 					continue;
 				}
 				finalBet = Bet.CALL;

@@ -47,7 +47,7 @@ public class Dealer {
                 if (stage == Stage.PRE_FLOP) {
                     non_folder = this.conductBets(p1, p2);
                 } else {
-                    non_folder = this.conductBets(p1, p2);
+                    non_folder = this.conductBets(p2, p1);
                 }
                 if (non_folder != null) {
                     return non_folder;
@@ -90,14 +90,17 @@ public class Dealer {
     private IPlayer conductBets(IPlayer p1, IPlayer p2) {
         bet.clear();
         do {
-            IPlayer non_folder = this.handleGetBet(p1, p2);
+            System.out.println("Bet: " + bet.getBet());
+            IPlayer non_folder = this.handleGetBet(p1, p2, 1);
             if (non_folder != null) {
                 return non_folder;
             }
-            non_folder = this.handleGetBet(p2, p1);
+            System.out.println("Bet: " + bet.getBet());
+            non_folder = this.handleGetBet(p2, p1, -1);
             if (non_folder != null) {
                 return non_folder;
             }
+            System.out.println("Bet: " + bet.getBet());
         } while(bet.getBet() != 0);
         return null;
     }
@@ -109,32 +112,32 @@ public class Dealer {
      * @param p2
      * @return
      */
-    private IPlayer handleGetBet(IPlayer p1, IPlayer p2) {
+    private IPlayer handleGetBet(IPlayer p1, IPlayer p2, int sign) {
         this.printGameStatus();
         int bet_value = p1.getBet(Math.abs(bet.getBet()));
         if (bet_value == Bet.FOLD) {
             return p2;
         } else if (bet_value == Bet.CALL) {
-            this.handleCall(p1);
+            this.handleCall(p1, sign);
         } else if (bet_value == Bet.ALLIN) {
-            this.handleAllIn(p1, p2);
+            this.handleAllIn(p1, p2, sign);
         } else if (bet_value > 0) { // RAISE
-            this.handleRaise(p1, bet_value);
+            this.handleRaise(p1, bet_value, sign);
         }
         return null;
     }
     
-    private void handleCall(IPlayer player) {
+    private void handleCall(IPlayer player, int sign) {
         int current_bet = Math.abs(bet.getBet());
-        bet.updateBet(bet.getBet() + current_bet);
+        bet.updateBet(bet.getBet() + current_bet * sign);
         player.subMoney(current_bet);
         pot.addMoney(current_bet);
     }
 
-    private void handleAllIn(IPlayer p1, IPlayer p2) {
+    private void handleAllIn(IPlayer p1, IPlayer p2, int sign) {
         int current_bet = Math.abs(bet.getBet());
         int p1_money = p1.getMoney();
-        bet.updateBet(bet.getBet() + p1_money);
+        bet.updateBet(bet.getBet() + p1_money * sign);
         pot.addMoney(p1_money);
         p1.subMoney(p1_money);
         int p2_back_money =
@@ -142,14 +145,15 @@ public class Dealer {
         p2.addMoney(p2_back_money);
     }
 
-    private void handleRaise(IPlayer player, int bet_value) {
+    private void handleRaise(IPlayer player, int bet_value, int sign) {
         int current_bet = Math.abs(bet.getBet());
-        bet.updateBet(bet.getBet() + current_bet + bet_value);
+        bet.updateBet(bet.getBet() + (current_bet + bet_value) * sign);
         player.subMoney(current_bet + bet_value);
         pot.addMoney(current_bet + bet_value);
     }
 
     private void printGameStatus() {
+        System.out.println();
         System.out.println("********************************");
         System.out.println("**Game Status**");
         System.out.print("Table Cards => ");
@@ -177,20 +181,27 @@ public class Dealer {
     }
     
     public void blindBet(IPlayer p1, IPlayer p2, int smallBlind){
+        this.printGameStatus();
+        System.out.println("Adding the blinds");
+
     	if(p1.getMoney()<smallBlind && p2.getMoney()>=smallBlind*2){
+            this.pot.addMoney(p1.getMoney() * 2);
     		p1.subMoney(p1.getMoney());
     		p2.subMoney(p1.getMoney());
     	}
     	else if(p1.getMoney()>=smallBlind && p2.getMoney()<smallBlind*2){
+            this.pot.addMoney(smallBlind + p2.getMoney());
     		p1.subMoney(smallBlind);
     		p2.subMoney(p2.getMoney());
     	}
     	else if(p1.getMoney()<smallBlind && p2.getMoney()<smallBlind*2){
     		int subAmount = (p1.getMoney()<=p2.getMoney())?p1.getMoney():p2.getMoney();
+    		this.pot.addMoney(subAmount * 2);
     		p1.subMoney(subAmount);
     		p2.subMoney(subAmount);
     	}
     	else{
+    	    this.pot.addMoney(smallBlind * 3);
     		p1.subMoney(smallBlind);
     		p2.subMoney(smallBlind*2);
     	}
@@ -231,6 +242,9 @@ public class Dealer {
         		dealer.blindBet(computer, player, smallBlind);
         		winner = dealer.playRound(computer, player);
         	}
+            winner.addMoney(dealer.pot.getMoney());
+            dealer.pot.clear();
+
         	System.out.println("Round " + round + " winner: "
         	        + winner.getName());
         	dealerButton = !dealerButton;
