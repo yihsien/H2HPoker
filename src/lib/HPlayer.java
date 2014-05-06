@@ -14,7 +14,7 @@ public class HPlayer extends Player {
 	public int getBet(int bet) {
 		int finalBet;
 		while(true){
-			int playerBet = getChoice(bet);
+			int playerBet = getChoice(Math.abs(bet));
 			if(playerBet == 1){
 				finalBet = Bet.FOLD;
 				break;

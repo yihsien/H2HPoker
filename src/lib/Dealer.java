@@ -133,10 +133,13 @@ public class Dealer {
         p1.placeBet(false);
         p2.placeBet(false);
         do {
+        	//System.out.println("Bet: "+bet.getBet());
+        	/*
         	if(bet.getBet()<=0)
         		System.out.println("Your stack is " + (bet.getBet())+" short");
         	else
         		System.out.println("Your stack is " + (bet.getBet())+" long");
+        	 */
             // if the same player is asked to play again when the other one
             // runs out of money => break
             if (Math.signum(bet.getBet()) == Math.signum(sign)) {
@@ -183,6 +186,7 @@ public class Dealer {
         int current_bet = Math.abs(bet.getBet());
         bet.updateBet(bet.getBet() + current_bet * sign);
         player.subMoney(current_bet);
+        player.setTotalBet(player.getTotalBet()+current_bet);
         pot.addMoney(current_bet);
     }
 
@@ -192,6 +196,7 @@ public class Dealer {
         bet.updateBet(bet.getBet() + p1_money * sign);
         pot.addMoney(p1_money);
         p1.subMoney(p1_money);
+        p1.setTotalBet(p1.getTotalBet()+p1_money);
         this.secondPotValue =
                 current_bet - p1_money > 0 ? current_bet - p1_money : 0;
         if (secondPotValue != 0) {
@@ -201,10 +206,10 @@ public class Dealer {
     }
 
     private void handleRaise(IPlayer player, int bet_value, int sign) {
-        int current_bet = Math.abs(bet.getBet());
-        bet.updateBet(bet.getBet() + (current_bet + bet_value) * sign);
-        player.subMoney(current_bet + bet_value);
-        pot.addMoney(current_bet + bet_value);
+        //int current_bet = Math.abs(bet.getBet());
+        bet.updateBet(bet.getBet() + (bet_value) * sign);
+        player.subMoney(bet_value);
+        pot.addMoney(bet_value);
     }
 
     private void printGameStatus() {
@@ -237,10 +242,10 @@ public class Dealer {
         			(this.human.getMoney()+this.human.getTotalBet()));
         }
         else{
-        	System.out.println(this.computer.getName()+"(SB) => Money in Hand: "+this.computer.getMoney()+
+        	System.out.println(this.computer.getName()+"(BB) => Money in Hand: "+this.computer.getMoney()+
         			", Money in pot: "+this.computer.getTotalBet()+", Total Money: "+
         			(this.computer.getMoney()+this.computer.getTotalBet()));
-        	System.out.println(this.human.getName()+"(BB) => Money in hand: "+this.human.getMoney()+
+        	System.out.println(this.human.getName()+"(SB) => Money in hand: "+this.human.getMoney()+
         			", Money in pot: "+this.human.getTotalBet()+", Total Money: "+
         			(this.human.getMoney()+this.human.getTotalBet()));        	
         }
@@ -357,11 +362,11 @@ public class Dealer {
 
         	System.out.println("Round " + round + " winner: "
         	        + winner.getName());
+        	player.setTotalBet(0);
+        	computer.setTotalBet(0);
         	stage = Stage.FINISH;
         	dealer.printGameStatus();
         	dealer.clear();
-        	player.setTotalBet(0);
-        	computer.setTotalBet(0);
         	System.out.println("Press enter to continue");
         	Scanner gameControl = new Scanner(System.in);
         	gameControl.nextLine();
