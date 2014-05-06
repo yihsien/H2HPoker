@@ -22,4 +22,6 @@ public interface IPlayer {
 	public void subMoney(int amount);
 	
 	public void clear();
+	
+	public void setTotalBet(int amount);
 }

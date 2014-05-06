@@ -15,7 +15,7 @@ import interfaces.IPot;
 import interfaces.ITableCards;
 
 public class Dealer {
-
+	public static int smallBlind;
     private IPlayer human;
     private IPlayer computer;
     private ITableCards table_cards;
@@ -24,6 +24,7 @@ public class Dealer {
     private IPot pot;
     private int secondPotValue;
     private IPlayer secondPotOwner;
+    private static Stage stage = Stage.PRE_FLOP;
     
     public Dealer() {
     	human = new HPlayer("player");
@@ -54,7 +55,7 @@ public class Dealer {
      */
     public IPlayer playRound(IPlayer p1, IPlayer p2) {
         this.dealCards(p1, p2, deck);
-        Stage stage = Stage.PRE_FLOP;
+        stage = Stage.PRE_FLOP;
         while (stage != Stage.SHOW) {
             if (p1.getMoney() != 0 && p2.getMoney() != 0) {
                 IPlayer non_folder = null;
@@ -130,7 +131,10 @@ public class Dealer {
         p1.placeBet(false);
         p2.placeBet(false);
         do {
-            System.out.println("Bet: " + bet.getBet());
+        	if(bet.getBet()<=0)
+        		System.out.println("Your stack is " + (bet.getBet())+" short");
+        	else
+        		System.out.println("Your stack is " + (bet.getBet())+" long");
             // if the same player is asked to play again when the other one
             // runs out of money => break
             if (Math.signum(bet.getBet()) == Math.signum(sign)) {
@@ -205,7 +209,15 @@ public class Dealer {
     	//System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         System.out.println();
         System.out.println("********************************");
-        System.out.println("**Game Status**");
+        switch(stage){
+        case PRE_FLOP: System.out.println("**Pre-Flop**"); break;
+        case PRE_TURN: System.out.println("**Flop**"); break;
+        case PRE_RIVER: System.out.println("**Turn**"); break;
+        case PRE_SHOW: System.out.println("**River**"); break;
+        case SHOW: System.out.println("**Show**"); break;
+        case FINISH: System.out.println("**Final Result**"); break;
+        default: break;
+        }
         System.out.print("Table Cards => ");
         ArrayList<ICard> cards = this.table_cards.getCards();
         System.out.println(cards.toString());
@@ -239,33 +251,41 @@ public class Dealer {
     }
     
     public void blindBet(IPlayer p1, IPlayer p2, int smallBlind){
-        this.printGameStatus();
+        //this.printGameStatus();
         System.out.println("Adding the blinds");
         System.out.println("Small: " + p1.getName() + "\nBig: " + p2.getName());
 
     	if(p1.getMoney()<smallBlind && p2.getMoney()>=smallBlind*2){
             this.pot.addMoney(p1.getMoney() * 2);
     		p1.subMoney(p1.getMoney());
+    		p1.setTotalBet(p1.getMoney());
     		p2.subMoney(p1.getMoney());
+    		p2.setTotalBet(p2.getMoney());
     	}
     	else if(p1.getMoney()>=smallBlind && p2.getMoney()<smallBlind*2){
             this.pot.addMoney(smallBlind + p2.getMoney());
     		p1.subMoney(smallBlind);
+    		p1.setTotalBet(smallBlind);
     		bet.updateBet(smallBlind);
     		p2.subMoney(p2.getMoney());
+    		p2.setTotalBet(p2.getMoney());
     		bet.updateBet(smallBlind-(p2.getMoney()));
     	}
     	else if(p1.getMoney()<smallBlind && p2.getMoney()<smallBlind*2){
     		int subAmount = (p1.getMoney()<=p2.getMoney())?p1.getMoney():p2.getMoney();
     		this.pot.addMoney(subAmount * 2);
     		p1.subMoney(subAmount);
+    		p1.setTotalBet(subAmount);
     		p2.subMoney(subAmount);
+    		p2.setTotalBet(subAmount);
     	}
     	else{
     	    this.pot.addMoney(smallBlind * 3);
     		p1.subMoney(smallBlind);
+    		p1.setTotalBet(smallBlind);
     		bet.updateBet(smallBlind);
     		p2.subMoney(smallBlind*2);
+    		p2.setTotalBet(smallBlind*2);
     		bet.updateBet(smallBlind-(smallBlind*2));
     	}
     }
@@ -274,7 +294,6 @@ public class Dealer {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-    	int smallBlind;
     	Dealer dealer = new Dealer();
         Random rand = new Random();
         IPlayer player = dealer.human;
@@ -316,15 +335,18 @@ public class Dealer {
             if (dealer.secondPotOwner != null) {
                 dealer.secondPotOwner.addMoney(dealer.secondPotValue);
             }
-            dealer.clear();
 
         	System.out.println("Round " + round + " winner: "
         	        + winner.getName());
-        	
+        	stage = Stage.FINISH;
+        	dealer.printGameStatus();
+        	dealer.clear();
+        	player.setTotalBet(0);
+        	computer.setTotalBet(0);
         	System.out.println("Press enter to continue");
         	Scanner gameControl = new Scanner(System.in);
         	gameControl.nextLine();
-        	gameControl.close();
+        	
         	
         	dealerButton = !dealerButton;
         	round++;

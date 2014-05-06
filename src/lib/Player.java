@@ -10,6 +10,7 @@ public abstract class Player implements IPlayer {
 	
 	
 	protected int money;
+	protected int totalBet = 0;
 	private ArrayList<ICard> hand = new ArrayList<ICard>();
 	private boolean hasPlacedBet = false;
 	
@@ -53,6 +54,11 @@ public abstract class Player implements IPlayer {
     @Override
     public void placeBet(boolean doPlaceBet) {
         this.hasPlacedBet = doPlaceBet;
+    }
+    
+    @Override
+    public void setTotalBet(int amount){
+    	totalBet = amount;
     }
 
 }
