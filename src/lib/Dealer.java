@@ -25,6 +25,8 @@ public class Dealer {
     private int secondPotValue;
     private IPlayer secondPotOwner;
     private static Stage stage = Stage.PRE_FLOP;
+    private static int round = 0;
+    private String sb;
     
     public Dealer() {
     	human = new HPlayer("player");
@@ -210,12 +212,12 @@ public class Dealer {
         System.out.println();
         System.out.println("********************************");
         switch(stage){
-        case PRE_FLOP: System.out.println("**Pre-Flop**"); break;
-        case PRE_TURN: System.out.println("**Flop**"); break;
-        case PRE_RIVER: System.out.println("**Turn**"); break;
-        case PRE_SHOW: System.out.println("**River**"); break;
-        case SHOW: System.out.println("**Show**"); break;
-        case FINISH: System.out.println("**Final Result**"); break;
+        case PRE_FLOP: System.out.println("**Round "+round+" (Pre-Flop)**"); break;
+        case PRE_TURN: System.out.println("**Round "+round+" (Flop)**"); break;
+        case PRE_RIVER: System.out.println("**Round "+round+" (Turn)**"); break;
+        case PRE_SHOW: System.out.println("**Round "+round+" (River)**"); break;
+        case SHOW: System.out.println("**Round "+round+" (Show)**"); break;
+        case FINISH: System.out.println("**Round "+round+" (Final Result)**"); break;
         default: break;
         }
         System.out.print("Table Cards => ");
@@ -226,8 +228,25 @@ public class Dealer {
             System.out.println("2nd Pot Money => " + this.secondPotValue);
             System.out.println("2nd Pot Owner => " + secondPotOwner.getName());
         }
-        System.out.println("Computer's Money => " + this.computer.getMoney());
-        System.out.println("Human's Money => " + this.human.getMoney());
+        if(sb == this.computer.getName()){
+        	System.out.println(this.computer.getName()+"(SB) => Money in Hand: "+this.computer.getMoney()+
+        			", Money in pot: "+this.computer.getTotalBet()+", Total Money: "+
+        			(this.computer.getMoney()+this.computer.getTotalBet()));
+        	System.out.println(this.human.getName()+"(BB) => Money in Hand: "+this.human.getMoney()+
+        			", Money in pot: "+this.human.getTotalBet()+", Total Money: "+
+        			(this.human.getMoney()+this.human.getTotalBet()));
+        }
+        else{
+        	System.out.println(this.computer.getName()+"(SB) => Money in Hand: "+this.computer.getMoney()+
+        			", Money in pot: "+this.computer.getTotalBet()+", Total Money: "+
+        			(this.computer.getMoney()+this.computer.getTotalBet()));
+        	System.out.println(this.human.getName()+"(BB) => Money in hand: "+this.human.getMoney()+
+        			", Money in pot: "+this.human.getTotalBet()+", Total Money: "+
+        			(this.human.getMoney()+this.human.getTotalBet()));        	
+        }
+        	
+        //System.out.println("Computer's Money => " + this.computer.getMoney());
+        //System.out.println("Human's Money => " + this.human.getMoney());
         System.out.println("Computer's Hand: " +
                 this.computer.getHand().toString());
         System.out.println("Human's Hand: " +
@@ -252,9 +271,9 @@ public class Dealer {
     
     public void blindBet(IPlayer p1, IPlayer p2, int smallBlind){
         //this.printGameStatus();
-        System.out.println("Adding the blinds");
-        System.out.println("Small: " + p1.getName() + "\nBig: " + p2.getName());
-
+        //System.out.println("Adding the blinds");
+        //System.out.println("Small: " + p1.getName() + "\nBig: " + p2.getName());
+        sb = p1.getName();
     	if(p1.getMoney()<smallBlind && p2.getMoney()>=smallBlind*2){
             this.pot.addMoney(p1.getMoney() * 2);
     		p1.subMoney(p1.getMoney());
@@ -313,7 +332,7 @@ public class Dealer {
         else
         	dealerButton = false;
         
-        int round = 0;
+        
         while(!dealer.gameEnd(player, computer)){
             IPlayer winner = null;
         	if(dealerButton){

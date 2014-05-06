@@ -60,5 +60,10 @@ public abstract class Player implements IPlayer {
     public void setTotalBet(int amount){
     	totalBet = amount;
     }
+    
+    @Override
+    public int getTotalBet(){
+    	return totalBet;
+    }
 
 }
