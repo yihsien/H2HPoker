@@ -40,7 +40,7 @@ public class HPlayer extends Player {
 				break;
 			}
 			else{
-				if(playerBet-totalBet>money){
+				if(playerBet-tempBet>money){
 					System.out.println("you are betting more than you have!");
 					continue;
 				}
@@ -48,12 +48,13 @@ public class HPlayer extends Player {
 					System.out.println("you have to bet at least one big blind ("+Dealer.smallBlind*2+")");
 					continue;
 				}
-				if(playerBet<((totalBet+Math.abs(bet)*2)>=(Dealer.smallBlind*4)?(totalBet+Math.abs(bet)*2):(Dealer.smallBlind*4))){
+				if(playerBet<((tempBet+Math.abs(bet)*2)>=(Dealer.smallBlind*4)?(tempBet+Math.abs(bet)*2):(Dealer.smallBlind*4))){
 					System.out.println("you have to at least raise to "+
-							((totalBet+Math.abs(bet)*2)>=(Dealer.smallBlind*4)?(totalBet+Math.abs(bet)*2):(Dealer.smallBlind*4)));
+							((tempBet+Math.abs(bet)*2)>=(Dealer.smallBlind*4)?(tempBet+Math.abs(bet)*2):(Dealer.smallBlind*4)));
 					continue;
 				}	
-				finalBet = playerBet-totalBet;
+				finalBet = playerBet-tempBet;
+				tempBet+=finalBet;
 				totalBet+=finalBet;
 				break;
 			}
@@ -65,7 +66,7 @@ public class HPlayer extends Player {
 		int bigBlind = Dealer.smallBlind*2;
 		if(money>=currentBet*2){
 			System.out.println("Fold(1), Check(2), Call(3), All-In(4), "+
-					"Raise to ("+(totalBet+currentBet*2>=bigBlind*2?totalBet+currentBet*2:bigBlind*2)+"-"+(money+totalBet)+")");
+					"Raise to ("+(tempBet+currentBet*2>=bigBlind*2?tempBet+currentBet*2:bigBlind*2)+"-"+(money+tempBet)+")");
 		}
 		else
 			System.out.println("Fold(1), Check(2), Call(3), All-In(4)");

@@ -26,4 +26,8 @@ public interface IPlayer {
 	public void setTotalBet(int amount);
 	
 	public int getTotalBet();
+	
+	public void setTempBet(int amount);
+	
+	public int getTempBet();
 }

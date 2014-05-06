@@ -43,7 +43,7 @@ public class CPlayer extends Player {
 			}
 			else{
 				int bigBlind = Dealer.smallBlind*2;
-				int betMin = Math.abs(bet)*2>=bigBlind*2-totalBet?Math.abs(bet)*2:bigBlind*2-totalBet;
+				int betMin = Math.abs(bet)*2>=bigBlind*2-tempBet?Math.abs(bet)*2:bigBlind*2-tempBet;
 				/*
 				if(bet == 0){
 					if(money>=bigBlind){
@@ -61,7 +61,8 @@ public class CPlayer extends Player {
 				else
 					continue;
 				
-				System.out.println("Computer play: Raise "+finalBet+ " to ("+(finalBet+totalBet)+")");
+				System.out.println("Computer play: Raise "+finalBet+ " to ("+(finalBet+tempBet)+")");
+				tempBet += finalBet;
 				totalBet += finalBet;
 				break;
 			}

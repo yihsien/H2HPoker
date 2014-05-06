@@ -11,6 +11,7 @@ public abstract class Player implements IPlayer {
 	
 	protected int money;
 	protected int totalBet = 0;
+	protected int tempBet = 0;
 	private ArrayList<ICard> hand = new ArrayList<ICard>();
 	private boolean hasPlacedBet = false;
 	
@@ -64,6 +65,16 @@ public abstract class Player implements IPlayer {
     @Override
     public int getTotalBet(){
     	return totalBet;
+    }
+    
+    @Override
+    public void setTempBet(int amount){
+    	tempBet = amount;
+    }
+    
+    @Override
+    public int getTempBet(){
+    	return tempBet;
     }
 
 }

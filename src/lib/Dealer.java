@@ -73,14 +73,26 @@ public class Dealer {
             if (stage == Stage.PRE_FLOP) {
                 table_cards.openFlop(deck);
                 table_cards.updateStage();
+                //p1.setTotalBet(p1.getTempBet());
+                p1.setTempBet(0);
+                //p2.setTotalBet(p2.getTempBet());
+                p2.setTempBet(0);
                 stage = Stage.PRE_TURN;
             } else if (stage == Stage.PRE_TURN) {
                 table_cards.openTurn(deck);
                 table_cards.updateStage();
+                //p1.setTotalBet(p1.getTotalBet()+p1.getTempBet());
+                p1.setTempBet(0);
+                //p2.setTotalBet(p2.getTotalBet()+p2.getTempBet());
+                p2.setTempBet(0);
                 stage = Stage.PRE_RIVER;
             } else if (stage == Stage.PRE_RIVER) {
                 table_cards.openRiver(deck);
                 table_cards.updateStage();
+                //p1.setTotalBet(p1.getTotalBet()+p1.getTempBet());
+                p1.setTempBet(0);
+                //p2.setTotalBet(p2.getTotalBet()+p2.getTempBet());
+                p2.setTempBet(0);
                 stage = Stage.PRE_SHOW;
             } else if (stage == Stage.PRE_SHOW) {
                 stage = Stage.SHOW;
@@ -186,6 +198,7 @@ public class Dealer {
         int current_bet = Math.abs(bet.getBet());
         bet.updateBet(bet.getBet() + current_bet * sign);
         player.subMoney(current_bet);
+        player.setTempBet(player.getTempBet()+current_bet);
         player.setTotalBet(player.getTotalBet()+current_bet);
         pot.addMoney(current_bet);
     }
@@ -196,6 +209,7 @@ public class Dealer {
         bet.updateBet(bet.getBet() + p1_money * sign);
         pot.addMoney(p1_money);
         p1.subMoney(p1_money);
+        p1.setTempBet(p1.getTempBet()+p1_money);
         p1.setTotalBet(p1.getTotalBet()+p1_money);
         this.secondPotValue =
                 current_bet - p1_money > 0 ? current_bet - p1_money : 0;
@@ -282,16 +296,20 @@ public class Dealer {
     	if(p1.getMoney()<smallBlind && p2.getMoney()>=smallBlind*2){
             this.pot.addMoney(p1.getMoney() * 2);
     		p1.subMoney(p1.getMoney());
+    		p1.setTempBet(p1.getMoney());
     		p1.setTotalBet(p1.getMoney());
     		p2.subMoney(p1.getMoney());
-    		p2.setTotalBet(p2.getMoney());
+    		p2.setTempBet(p2.getMoney());
+    		p1.setTotalBet(p2.getMoney());
     	}
     	else if(p1.getMoney()>=smallBlind && p2.getMoney()<smallBlind*2){
             this.pot.addMoney(smallBlind + p2.getMoney());
     		p1.subMoney(smallBlind);
+    		p1.setTempBet(smallBlind);
     		p1.setTotalBet(smallBlind);
     		bet.updateBet(smallBlind);
     		p2.subMoney(p2.getMoney());
+    		p2.setTempBet(p2.getMoney());
     		p2.setTotalBet(p2.getMoney());
     		bet.updateBet(smallBlind-(p2.getMoney()));
     	}
@@ -299,16 +317,20 @@ public class Dealer {
     		int subAmount = (p1.getMoney()<=p2.getMoney())?p1.getMoney():p2.getMoney();
     		this.pot.addMoney(subAmount * 2);
     		p1.subMoney(subAmount);
+    		p1.setTempBet(subAmount);
     		p1.setTotalBet(subAmount);
     		p2.subMoney(subAmount);
+    		p2.setTempBet(subAmount);
     		p2.setTotalBet(subAmount);
     	}
     	else{
     	    this.pot.addMoney(smallBlind * 3);
     		p1.subMoney(smallBlind);
+    		p1.setTempBet(smallBlind);
     		p1.setTotalBet(smallBlind);
     		bet.updateBet(smallBlind);
     		p2.subMoney(smallBlind*2);
+    		p2.setTempBet(smallBlind*2);
     		p2.setTotalBet(smallBlind*2);
     		bet.updateBet(smallBlind-(smallBlind*2));
     	}
