@@ -4,6 +4,12 @@ import java.util.*;
 
 public class CPlayer extends Player {
 
+	
+	private String name;
+	
+	public CPlayer(String name){
+		this.name = name;
+	}
 	@Override
 	public int getBet(int bet) {
 		int finalBet;
@@ -24,7 +30,7 @@ public class CPlayer extends Player {
 				break;
 			}
 			else if(playerBet <= 7){
-				if(money<bet || bet == 0){
+				if(money<Math.abs(bet) || bet == 0){
 					continue;
 				}
 				finalBet = Bet.CALL;
@@ -37,10 +43,10 @@ public class CPlayer extends Player {
 				break;
 			}
 			else{
-				if((money-bet)<bet){
+				if((money-Math.abs(bet))<Math.abs(bet)){
 					continue;
 				}
-				finalBet = rand.nextInt(money-bet);
+				finalBet = rand.nextInt(money-Math.abs(bet))+Math.abs(bet)+1;
 				System.out.println("Computer play: Raise("+finalBet+")");
 				break;
 			}
@@ -48,10 +54,8 @@ public class CPlayer extends Player {
 		return finalBet;
 	}
 	
-
-    @Override
-    public String getName() {
-        return "computer";
-    }
+	 public String getName() {
+	        return name;
+	    }
     
 }

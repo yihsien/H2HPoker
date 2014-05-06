@@ -26,8 +26,8 @@ public class Dealer {
     private IPlayer secondPotOwner;
     
     public Dealer() {
-    	human = new HPlayer();
-        computer = new CPlayer();
+    	human = new HPlayer("player");
+        computer = new CPlayer("computer");
         table_cards = new TableCards();
         deck = new Deck();
         bet = new Bet();
@@ -125,7 +125,7 @@ public class Dealer {
      */
     private IPlayer conductBets(IPlayer p1, IPlayer p2) {
         // set up
-        bet.clear();
+        //bet.clear();
         int sign = 1;
         p1.placeBet(false);
         p2.placeBet(false);
@@ -202,6 +202,7 @@ public class Dealer {
     }
 
     private void printGameStatus() {
+    	//System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         System.out.println();
         System.out.println("********************************");
         System.out.println("**Game Status**");
@@ -250,7 +251,9 @@ public class Dealer {
     	else if(p1.getMoney()>=smallBlind && p2.getMoney()<smallBlind*2){
             this.pot.addMoney(smallBlind + p2.getMoney());
     		p1.subMoney(smallBlind);
+    		bet.updateBet(smallBlind);
     		p2.subMoney(p2.getMoney());
+    		bet.updateBet(smallBlind-(p2.getMoney()));
     	}
     	else if(p1.getMoney()<smallBlind && p2.getMoney()<smallBlind*2){
     		int subAmount = (p1.getMoney()<=p2.getMoney())?p1.getMoney():p2.getMoney();
@@ -261,7 +264,9 @@ public class Dealer {
     	else{
     	    this.pot.addMoney(smallBlind * 3);
     		p1.subMoney(smallBlind);
+    		bet.updateBet(smallBlind);
     		p2.subMoney(smallBlind*2);
+    		bet.updateBet(smallBlind-(smallBlind*2));
     	}
     }
 
@@ -315,6 +320,12 @@ public class Dealer {
 
         	System.out.println("Round " + round + " winner: "
         	        + winner.getName());
+        	
+        	System.out.println("Press enter to continue");
+        	Scanner gameControl = new Scanner(System.in);
+        	gameControl.nextLine();
+        	gameControl.close();
+        	
         	dealerButton = !dealerButton;
         	round++;
         }

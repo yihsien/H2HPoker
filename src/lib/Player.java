@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 
 public abstract class Player implements IPlayer {
+	
+	
 	protected int money;
 	private ArrayList<ICard> hand = new ArrayList<ICard>();
 	private boolean hasPlacedBet = false;
