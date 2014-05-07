@@ -18,7 +18,7 @@ public class CPlayer extends Player {
 			int playerBet = rand.nextInt(10)+1;
 			if(playerBet == 1){
 				finalBet = Bet.FOLD;
-				System.out.println("Computer play: Fold");
+				System.out.println(this.getName() + " play: Fold");
 				break;
 			}
 			else if(playerBet <= 3){
@@ -26,7 +26,7 @@ public class CPlayer extends Player {
 					continue;
 				}
 				finalBet = Bet.CHECK;
-				System.out.println("Computer play: Check");
+				System.out.println(this.getName() + " play: Check");
 				break;
 			}
 			else if(playerBet <= 7){
@@ -34,16 +34,16 @@ public class CPlayer extends Player {
 					continue;
 				}
 				finalBet = Bet.CALL;
-				System.out.println("Computer play: Call");
+				System.out.println(this.getName() + " play: Call");
 				break;
 			}
 			else if(playerBet <= 8){
 				finalBet = Bet.ALLIN;
-				System.out.println("Computer play: ALL-In");
+				System.out.println(this.getName() + " play: ALL-In");
 				break;
 			}
 			else{
-				int bigBlind = Dealer.smallBlind*2;
+				int bigBlind = Dealer.getDealerInstance().smallBlind*2;
 				int betMin = Math.abs(bet)*2>=bigBlind*2-tempBet?Math.abs(bet)*2:bigBlind*2-tempBet;
 				/*
 				if(bet == 0){
@@ -62,7 +62,8 @@ public class CPlayer extends Player {
 				else
 					continue;
 				
-				System.out.println("Computer play: Raise "+finalBet+ " to ("+(finalBet+tempBet)+")");
+				System.out.println(this.getName() + " play: Raise by " + 
+				        finalBet+ " to ("+(finalBet+tempBet)+")");
 				tempBet += finalBet;
 				totalBet += finalBet;
 				break;

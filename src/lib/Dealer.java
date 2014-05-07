@@ -18,9 +18,9 @@ import interfaces.ITableCards;
 
 public class Dealer implements IDealer {
     private static Dealer dealerInstance;
-	public static int smallBlind;
-    private IPlayer human;
-    private IPlayer computer;
+	public int smallBlind;
+    private IPlayer player1;
+    private IPlayer player2;
     private ITableCards tableCards;
     private IDeck deck;
     private IBet bet;
@@ -30,13 +30,14 @@ public class Dealer implements IDealer {
     private static Stage stage = Stage.PRE_FLOP;
     private static int round = 0;
     private String sb;
+    private int startingMoney;
     
     private Dealer() {
         if (dealerInstance != null) {
             return;
         }
-    	human = new HPlayer("player");
-        computer = new CPlayer("computer");
+    	player1 = null;
+    	player2 = null;
         tableCards = new TableCards();
         deck = new Deck();
         bet = new Bet();
@@ -48,8 +49,8 @@ public class Dealer implements IDealer {
     public void clear() {
         this.tableCards.clear();
         this.pot.clear();
-        human.clear();
-        computer.clear();
+        player1.clear();
+        player2.clear();
         bet.clear();
         this.secondPotOwner = null;
         this.secondPotValue = 0;
@@ -257,29 +258,27 @@ public class Dealer implements IDealer {
             System.out.println("2nd Pot Money => " + this.secondPotValue);
             System.out.println("2nd Pot Owner => " + secondPotOwner.getName());
         }
-        if(sb == this.computer.getName()){
-        	System.out.println(this.computer.getName()+"(SB) => Money in Hand: "+this.computer.getMoney()+
-        			", Money in pot: "+this.computer.getTotalBet()+", Total Money: "+
-        			(this.computer.getMoney()+this.computer.getTotalBet()));
-        	System.out.println(this.human.getName()+"(BB) => Money in Hand: "+this.human.getMoney()+
-        			", Money in pot: "+this.human.getTotalBet()+", Total Money: "+
-        			(this.human.getMoney()+this.human.getTotalBet()));
+        if(sb == this.player2.getName()){
+        	System.out.println(this.player2.getName()+"(SB) => Money in Hand: "+this.player2.getMoney()+
+        			", Money in pot: "+this.player2.getTotalBet()+", Total Money: "+
+        			(this.player2.getMoney()+this.player2.getTotalBet()));
+        	System.out.println(this.player1.getName()+"(BB) => Money in Hand: "+this.player1.getMoney()+
+        			", Money in pot: "+this.player1.getTotalBet()+", Total Money: "+
+        			(this.player1.getMoney()+this.player1.getTotalBet()));
         }
         else{
-        	System.out.println(this.computer.getName()+"(BB) => Money in Hand: "+this.computer.getMoney()+
-        			", Money in pot: "+this.computer.getTotalBet()+", Total Money: "+
-        			(this.computer.getMoney()+this.computer.getTotalBet()));
-        	System.out.println(this.human.getName()+"(SB) => Money in hand: "+this.human.getMoney()+
-        			", Money in pot: "+this.human.getTotalBet()+", Total Money: "+
-        			(this.human.getMoney()+this.human.getTotalBet()));        	
+        	System.out.println(this.player2.getName()+"(BB) => Money in Hand: "+this.player2.getMoney()+
+        			", Money in pot: "+this.player2.getTotalBet()+", Total Money: "+
+        			(this.player2.getMoney()+this.player2.getTotalBet()));
+        	System.out.println(this.player1.getName()+"(SB) => Money in hand: "+this.player1.getMoney()+
+        			", Money in pot: "+this.player1.getTotalBet()+", Total Money: "+
+        			(this.player1.getMoney()+this.player1.getTotalBet()));        	
         }
         	
-        //System.out.println("Computer's Money => " + this.computer.getMoney());
-        //System.out.println("Human's Money => " + this.human.getMoney());
-        System.out.println("Computer's Hand: " +
-                this.computer.getHand().toString());
-        System.out.println("Human's Hand: " +
-                this.human.getHand().toString());
+        System.out.println(this.player2.getName()+"'s Hand: " +
+                this.player2.getHand().toString());
+        System.out.println(this.player1.getName()+"'s Hand: " +
+                this.player1.getHand().toString());
         System.out.println("********************************");
     }
 
@@ -299,9 +298,6 @@ public class Dealer implements IDealer {
     }
     
     public void blindBet(IPlayer p1, IPlayer p2, int smallBlind){
-        //this.printGameStatus();
-        //System.out.println("Adding the blinds");
-        //System.out.println("Small: " + p1.getName() + "\nBig: " + p2.getName());
         sb = p1.getName();
     	if(p1.getMoney()<smallBlind && p2.getMoney()>=smallBlind*2){
             this.pot.addMoney(p1.getMoney() * 2);
@@ -345,69 +341,78 @@ public class Dealer implements IDealer {
     		bet.updateBet(smallBlind-(smallBlind*2));
     	}
     }
+    
+    public void play() {
+        Random rand = new Random();
+        player1.addMoney(startingMoney);
+        player2.addMoney(startingMoney);
+       
+        int pickedNum = rand.nextInt(2);
+        boolean dealerButton = true;
+        if(pickedNum == 0)
+            dealerButton = true;
+        else
+            dealerButton = false;
+        
+        while(!this.gameEnd(player1, player2)){
+            IPlayer winner = null;
+            if(dealerButton){
+                this.blindBet(player1, player2, smallBlind);
+                winner = this.playRound(player1, player2);
+            }
+            else{
+                this.blindBet(player2, player1, smallBlind);
+                winner = this.playRound(player2, player1);
+            }
+            // handle tie
+            if (winner == null) {
+                int half = this.pot.getMoney()/2;
+                player1.addMoney(half);
+                player2.addMoney(this.pot.getMoney() - half);
+            } else {
+                winner.addMoney(this.pot.getMoney());
+            }
+            if (this.secondPotOwner != null) {
+                this.secondPotOwner.addMoney(this.secondPotValue);
+            }
+
+            System.out.println("Round " + round + " winner: "
+                    + winner.getName());
+            player1.setTotalBet(0);
+            player2.setTotalBet(0);
+            stage = Stage.FINISH;
+            this.clear();
+            this.printGameStatus();
+            
+            // TO DO: auto start the next round. remove the next 3 lines
+            System.out.println("Press enter to continue");
+            Scanner gameControl = new Scanner(System.in);
+            gameControl.nextLine();
+            
+            dealerButton = !dealerButton;
+            round++;
+        }
+    }
 
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception {
-    	Dealer dealer = Dealer.getDealerInstance();
-        Random rand = new Random();
-        IPlayer player = dealer.human;
-        IPlayer computer = dealer.computer;
-    	System.out.println("Please decide the small blind amount: ");
-    	Scanner reader = new Scanner(System.in);
-    	smallBlind = reader.nextInt();
-    	System.out.println("Please enter your starting money (Computer will match you)");
-    	int startingMoney = reader.nextInt();
-    	player.addMoney(startingMoney);
-    	computer.addMoney(startingMoney);
-       
-        int pickedNum = rand.nextInt(2);
-        boolean dealerButton = true;
-        if(pickedNum == 0)
-        	dealerButton = true;
-        else
-        	dealerButton = false;
+        System.out.println("Please decide the small blind amount: ");
+        Scanner reader = new Scanner(System.in);
+        int small_blind = reader.nextInt();
+        System.out.println("Please enter your starting money (Computer will match you)");
+        int starting_money = reader.nextInt();
         
-        
-        while(!dealer.gameEnd(player, computer)){
-            IPlayer winner = null;
-        	if(dealerButton){
-        		dealer.blindBet(player, computer, smallBlind);
-        		winner = dealer.playRound(player, computer);
-        	}
-        	else{
-        		dealer.blindBet(computer, player, smallBlind);
-        		winner = dealer.playRound(computer, player);
-        	}
-        	// handle tie
-        	if (winner == null) {
-        	    int half = dealer.pot.getMoney()/2;
-        	    player.addMoney(half);
-        	    computer.addMoney(dealer.pot.getMoney() - half);
-        	} else {
-        	    winner.addMoney(dealer.pot.getMoney());
-        	}
-            if (dealer.secondPotOwner != null) {
-                dealer.secondPotOwner.addMoney(dealer.secondPotValue);
-            }
-
-        	System.out.println("Round " + round + " winner: "
-        	        + winner.getName());
-        	player.setTotalBet(0);
-        	computer.setTotalBet(0);
-        	stage = Stage.FINISH;
-        	dealer.printGameStatus();
-        	dealer.clear();
-        	System.out.println("Press enter to continue");
-        	Scanner gameControl = new Scanner(System.in);
-        	gameControl.nextLine();
-        	
-        	
-        	dealerButton = !dealerButton;
-        	round++;
-        }
-        reader.close();
+        IPlayer player1 = new HPlayer("player");
+        player1 = new CPlayer("player");
+        IPlayer player2 = new CPlayer("computer");
+        Dealer dealer = Dealer.getDealerInstance();
+        dealer.smallBlind = small_blind;
+        dealer.startingMoney = starting_money;
+        dealer.setPlayer1(player1);
+        dealer.setPlayer2(player2);
+        dealer.play();
     }
     
     public static Dealer getDealerInstance() {
@@ -434,11 +439,21 @@ public class Dealer implements IDealer {
 
     @Override
     public IMove getOtherPlayerMove(IPlayer player) {
-        if (player.getName().equals(this.human.getName())) {
-            return this.computer.getMove();
+        if (player.getName().equals(this.player1.getName())) {
+            return this.player2.getMove();
         } else {
-            return this.human.getMove();
+            return this.player1.getMove();
         }
+    }
+
+    @Override
+    public void setPlayer1(IPlayer player) {
+        this.player1 = player;
+    }
+
+    @Override
+    public void setPlayer2(IPlayer player) {
+        this.player2 = player;
     }
 
 }

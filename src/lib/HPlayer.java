@@ -41,17 +41,18 @@ public class HPlayer extends Player {
 				break;
 			}
 			else{
+			    int small_blind = Dealer.getDealerInstance().smallBlind;
 				if(playerBet-tempBet>money){
 					System.out.println("you are betting more than you have!");
 					continue;
 				}
-				if(bet == 0 && playerBet<Dealer.smallBlind*2){
-					System.out.println("you have to bet at least one big blind ("+Dealer.smallBlind*2+")");
+				if(bet == 0 && playerBet < small_blind * 2){
+					System.out.println("you have to bet at least one big blind ("+small_blind*2+")");
 					continue;
 				}
-				if(playerBet<((tempBet+Math.abs(bet)*2)>=(Dealer.smallBlind*4)?(tempBet+Math.abs(bet)*2):(Dealer.smallBlind*4))){
+				if(playerBet<((tempBet+Math.abs(bet)*2)>=(small_blind*4)?(tempBet+Math.abs(bet)*2):(small_blind*4))){
 					System.out.println("you have to at least raise to "+
-							((tempBet+Math.abs(bet)*2)>=(Dealer.smallBlind*4)?(tempBet+Math.abs(bet)*2):(Dealer.smallBlind*4)));
+							((tempBet+Math.abs(bet)*2)>=(small_blind*4)?(tempBet+Math.abs(bet)*2):(small_blind*4)));
 					continue;
 				}	
 				finalBet = playerBet-tempBet;
@@ -64,7 +65,7 @@ public class HPlayer extends Player {
 	}
 	
 	private int getChoice(int currentBet) {
-		int bigBlind = Dealer.smallBlind*2;
+		int bigBlind = Dealer.getDealerInstance().smallBlind*2;
 		if(money>=currentBet*2){
 			System.out.println("Fold(1), Check(2), Call(3), All-In(4), "+
 					"Raise to ("+(tempBet+currentBet*2>=bigBlind*2?tempBet+currentBet*2:bigBlind*2)+"-"+(money+tempBet)+")");
@@ -72,7 +73,8 @@ public class HPlayer extends Player {
 		else
 			System.out.println("Fold(1), Check(2), Call(3), All-In(4)");
 		System.out.print("Please enter your bet: ");
-		Scanner reader = new Scanner(System.in);
+		@SuppressWarnings("resource")
+        Scanner reader = new Scanner(System.in);
 		return reader.nextInt();
 	}
 
