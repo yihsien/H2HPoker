@@ -405,8 +405,10 @@ public class Dealer implements IDealer {
         int starting_money = reader.nextInt();
         
         IPlayer player1 = new HPlayer("player");
-        player1 = new CPlayer("player");
+        //player1 = new CPlayer("player");
         IPlayer player2 = new CPlayer("computer");
+        //player2 = new HPlayer("human");
+        
         Dealer dealer = Dealer.getDealerInstance();
         dealer.smallBlind = small_blind;
         dealer.startingMoney = starting_money;
