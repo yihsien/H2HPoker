@@ -14,11 +14,13 @@ public abstract class Player implements IPlayer {
 	protected int totalBet = 0;
 	protected int tempBet = 0;
 	protected IMove move = null;
+	private String name = null;
 	private ArrayList<ICard> hand = new ArrayList<ICard>();
 	private boolean hasPlacedBet = false;
 	
-	public Player() {
+	public Player(String name) {
 	    this.move = new Move();
+	    this.name = name;
 	}
 	
 	@Override
@@ -86,6 +88,11 @@ public abstract class Player implements IPlayer {
     @Override
     public IMove getMove(){
         return move;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
 }

@@ -5,10 +5,8 @@ import java.util.*;
 
 public class HPlayer extends Player {
 	
-	private String name;
 	public HPlayer(String name){
-	    super();
-		this.name = name;
+	    super(name);
 	}
 	
 	@Override
@@ -78,9 +76,4 @@ public class HPlayer extends Player {
 		return reader.nextInt();
 	}
 
-
-    @Override
-    public String getName() {
-        return name;
-    }
 }

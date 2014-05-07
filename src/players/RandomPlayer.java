@@ -1,15 +1,17 @@
-package lib;
+package players;
 
 import java.util.*;
 
-public class CPlayer extends Player {
+import lib.Bet;
+import lib.Dealer;
+import lib.Player;
 
-	
-	private String name;
-	public CPlayer(String name){
-	    super();
-		this.name = name;
+public class RandomPlayer extends Player {
+
+	public RandomPlayer(String name){
+	    super(name);
 	}
+
 	@Override
 	public int getBet(int bet) {
 		int finalBet;
@@ -71,9 +73,5 @@ public class CPlayer extends Player {
 		}
 		return finalBet;
 	}
-	
-	 public String getName() {
-	        return name;
-	    }
-    
+
 }

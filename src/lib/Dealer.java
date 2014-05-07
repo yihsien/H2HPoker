@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import players.RandomPlayer;
+
 import enums.Scores;
 import enums.Stage;
 
@@ -405,8 +407,8 @@ public class Dealer implements IDealer {
         int starting_money = reader.nextInt();
         
         IPlayer player1 = new HPlayer("player");
-        //player1 = new CPlayer("player");
-        IPlayer player2 = new CPlayer("computer");
+        //player1 = new RandomPlayer("player");
+        IPlayer player2 = new RandomPlayer("computer");
         //player2 = new HPlayer("human");
         
         Dealer dealer = Dealer.getDealerInstance();
