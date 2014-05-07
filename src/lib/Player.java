@@ -1,6 +1,7 @@
 package lib;
 
 import interfaces.ICard;
+import interfaces.IMove;
 
 import interfaces.IPlayer;
 import java.util.ArrayList;
@@ -12,8 +13,13 @@ public abstract class Player implements IPlayer {
 	protected int money;
 	protected int totalBet = 0;
 	protected int tempBet = 0;
+	protected IMove move = null;
 	private ArrayList<ICard> hand = new ArrayList<ICard>();
 	private boolean hasPlacedBet = false;
+	
+	public Player() {
+	    this.move = new Move();
+	}
 	
 	@Override
 	public ArrayList<ICard> getHand() {
@@ -75,6 +81,11 @@ public abstract class Player implements IPlayer {
     @Override
     public int getTempBet(){
     	return tempBet;
+    }
+
+    @Override
+    public IMove getMove(){
+        return move;
     }
 
 }

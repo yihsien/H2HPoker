@@ -30,4 +30,6 @@ public interface IPlayer {
 	public void setTempBet(int amount);
 	
 	public int getTempBet();
+	
+	public IMove getMove();
 }

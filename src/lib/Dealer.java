@@ -9,16 +9,19 @@ import enums.Stage;
 
 import interfaces.IBet;
 import interfaces.ICard;
+import interfaces.IDealer;
 import interfaces.IDeck;
+import interfaces.IMove;
 import interfaces.IPlayer;
 import interfaces.IPot;
 import interfaces.ITableCards;
 
-public class Dealer {
+public class Dealer implements IDealer {
+    private static Dealer dealerInstance;
 	public static int smallBlind;
     private IPlayer human;
     private IPlayer computer;
-    private ITableCards table_cards;
+    private ITableCards tableCards;
     private IDeck deck;
     private IBet bet;
     private IPot pot;
@@ -28,10 +31,13 @@ public class Dealer {
     private static int round = 0;
     private String sb;
     
-    public Dealer() {
+    private Dealer() {
+        if (dealerInstance != null) {
+            return;
+        }
     	human = new HPlayer("player");
         computer = new CPlayer("computer");
-        table_cards = new TableCards();
+        tableCards = new TableCards();
         deck = new Deck();
         bet = new Bet();
         pot = new Pot();
@@ -40,7 +46,7 @@ public class Dealer {
     }
     
     public void clear() {
-        this.table_cards.clear();
+        this.tableCards.clear();
         this.pot.clear();
         human.clear();
         computer.clear();
@@ -71,24 +77,24 @@ public class Dealer {
                 }
             }
             if (stage == Stage.PRE_FLOP) {
-                table_cards.openFlop(deck);
-                table_cards.updateStage();
+                tableCards.openFlop(deck);
+                tableCards.updateStage();
                 //p1.setTotalBet(p1.getTempBet());
                 p1.setTempBet(0);
                 //p2.setTotalBet(p2.getTempBet());
                 p2.setTempBet(0);
                 stage = Stage.PRE_TURN;
             } else if (stage == Stage.PRE_TURN) {
-                table_cards.openTurn(deck);
-                table_cards.updateStage();
+                tableCards.openTurn(deck);
+                tableCards.updateStage();
                 //p1.setTotalBet(p1.getTotalBet()+p1.getTempBet());
                 p1.setTempBet(0);
                 //p2.setTotalBet(p2.getTotalBet()+p2.getTempBet());
                 p2.setTempBet(0);
                 stage = Stage.PRE_RIVER;
             } else if (stage == Stage.PRE_RIVER) {
-                table_cards.openRiver(deck);
-                table_cards.updateStage();
+                tableCards.openRiver(deck);
+                tableCards.updateStage();
                 //p1.setTotalBet(p1.getTotalBet()+p1.getTempBet());
                 p1.setTempBet(0);
                 //p2.setTotalBet(p2.getTotalBet()+p2.getTempBet());
@@ -109,8 +115,8 @@ public class Dealer {
      * @return the winning player, null in case of tie
      */
     private IPlayer decideWinner(IPlayer p1, IPlayer p2) {
-        p1.getHand().addAll(this.table_cards.getCards());
-        p2.getHand().addAll(this.table_cards.getCards());
+        p1.getHand().addAll(this.tableCards.getCards());
+        p2.getHand().addAll(this.tableCards.getCards());
         Scores p1_score = new HandScore(p1.getHand()).getHandScore();
         Scores p2_score = new HandScore(p2.getHand()).getHandScore();
         System.out.println(p1.getName() + "'s Score: " + p1_score.toString());
@@ -145,13 +151,6 @@ public class Dealer {
         p1.placeBet(false);
         p2.placeBet(false);
         do {
-        	//System.out.println("Bet: "+bet.getBet());
-        	/*
-        	if(bet.getBet()<=0)
-        		System.out.println("Your stack is " + (bet.getBet())+" short");
-        	else
-        		System.out.println("Your stack is " + (bet.getBet())+" long");
-        	 */
             // if the same player is asked to play again when the other one
             // runs out of money => break
             if (Math.signum(bet.getBet()) == Math.signum(sign)) {
@@ -183,13 +182,24 @@ public class Dealer {
         this.printGameStatus();
         int bet_value = p1.getBet(Math.abs(bet.getBet()));
         if (bet_value == Bet.FOLD) {
+            p1.getMove().setBetChoice(Bet.FOLD);
+            p1.getMove().setBetChoice(0);
             return p2;
         } else if (bet_value == Bet.CALL) {
+            p1.getMove().setBetChoice(Bet.CALL);
+            p1.getMove().setBetChoice(Math.abs(bet.getBet()));
             this.handleCall(p1, sign);
         } else if (bet_value == Bet.ALLIN) {
+            p1.getMove().setBetChoice(Bet.ALLIN);
+            p1.getMove().setBetChoice(p1.getMoney());
             this.handleAllIn(p1, p2, sign);
-        } else if (bet_value > 0) { // RAISE
+        } else if (bet_value > 0) {                 // RAISE
+            p1.getMove().setBetChoice(Bet.RAISE);
+            p1.getMove().setBetChoice(bet_value);
             this.handleRaise(p1, bet_value, sign);
+        } else {                                    // CHECK
+            p1.getMove().setBetChoice(Bet.CHECK);
+            p1.getMove().setBetChoice(0);
         }
         return null;
     }
@@ -240,7 +250,7 @@ public class Dealer {
         default: break;
         }
         System.out.print("Table Cards => ");
-        ArrayList<ICard> cards = this.table_cards.getCards();
+        ArrayList<ICard> cards = this.tableCards.getCards();
         System.out.println(cards.toString());
         System.out.println("Pot Money => " + this.pot.getMoney());
         if (this.secondPotValue != 0) {
@@ -340,7 +350,7 @@ public class Dealer {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-    	Dealer dealer = new Dealer();
+    	Dealer dealer = Dealer.getDealerInstance();
         Random rand = new Random();
         IPlayer player = dealer.human;
         IPlayer computer = dealer.computer;
@@ -398,6 +408,37 @@ public class Dealer {
         	round++;
         }
         reader.close();
+    }
+    
+    public static Dealer getDealerInstance() {
+        if (Dealer.dealerInstance == null) {
+            Dealer.dealerInstance = new Dealer();
+        }
+        return Dealer.dealerInstance;
+    }
+
+    @Override
+    public IPot getPot() {
+        return this.pot;
+    }
+
+    @Override
+    public ITableCards getTableCards() {
+        return this.tableCards;
+    }
+
+    @Override
+    public IBet getBet() {
+        return this.bet;
+    }
+
+    @Override
+    public IMove getOtherPlayerMove(IPlayer player) {
+        if (player.getName().equals(this.human.getName())) {
+            return this.computer.getMove();
+        } else {
+            return this.human.getMove();
+        }
     }
 
 }

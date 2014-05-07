@@ -7,6 +7,7 @@ public class HPlayer extends Player {
 	
 	private String name;
 	public HPlayer(String name){
+	    super();
 		this.name = name;
 	}
 	

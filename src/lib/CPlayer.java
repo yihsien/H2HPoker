@@ -7,6 +7,7 @@ public class CPlayer extends Player {
 	
 	private String name;
 	public CPlayer(String name){
+	    super();
 		this.name = name;
 	}
 	@Override
