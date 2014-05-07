@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import players.HumanPlayer;
 import players.RandomPlayer;
 
 import enums.Scores;
@@ -406,7 +407,7 @@ public class Dealer implements IDealer {
         System.out.println("Please enter your starting money (Computer will match you)");
         int starting_money = reader.nextInt();
         
-        IPlayer player1 = new HPlayer("player");
+        IPlayer player1 = new HumanPlayer("player");
         //player1 = new RandomPlayer("player");
         IPlayer player2 = new RandomPlayer("computer");
         //player2 = new HPlayer("human");

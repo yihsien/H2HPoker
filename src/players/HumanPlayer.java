@@ -1,11 +1,15 @@
-package lib;
+package players;
 
 
 import java.util.*;
 
-public class HPlayer extends Player {
+import lib.Bet;
+import lib.Dealer;
+import lib.Player;
+
+public class HumanPlayer extends Player {
 	
-	public HPlayer(String name){
+	public HumanPlayer(String name){
 	    super(name);
 	}
 	

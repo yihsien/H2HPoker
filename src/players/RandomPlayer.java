@@ -47,15 +47,6 @@ public class RandomPlayer extends Player {
 			else{
 				int bigBlind = Dealer.getDealerInstance().smallBlind*2;
 				int betMin = Math.abs(bet)*2>=bigBlind*2-tempBet?Math.abs(bet)*2:bigBlind*2-tempBet;
-				/*
-				if(bet == 0){
-					if(money>=bigBlind){
-						finalBet = (rand.nextInt((money-bigBlind)+1)+bigBlind)-totalBet;
-					}
-					else
-						continue;
-				}
-				*/
 				if(money>=betMin){
 					do
 						finalBet = rand.nextInt((money-betMin)+1)+betMin;
