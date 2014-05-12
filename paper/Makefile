@@ -1,6 +1,6 @@
 all:	report.pdf clean
 
-report.pdf: report.tex sigproc.bib IEEEtran.cls latex-config.tex
+report.pdf: report.tex report.bib
 	pdflatex report
 	-bibtex report
 	pdflatex report
