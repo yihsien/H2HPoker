@@ -76,9 +76,30 @@ W_{t+1} &= \Sum_{i:\xi_{t,i}\neq^*y_t}w_{t+1,i} + \Sum_{i:\xi_{t,i}=^*y_t}w_{t+1
 \end{align}
 \noindent In Equation~\ref{eq:same-beta}, it is assumed the experts are penalized with the same
 weight factor $\beta$ irrespective of the mis-predictions made on \texttt{call}, \texttt{raise},
-\texttt{fold} or \texttt{check}.
+\texttt{fold} or \texttt{check}. This leads to a bound similar to the randomized weighted
+majority algorithm \ie
+\[\mathbb{E}[(\#\text{mistakes of learner})]\leq a_{\beta}\mathbb{E}[(\#\text{mistakes of best expert})]
++ c_{\beta}\lg N\] where $a_{\beta}=\frac{\ln(1/\beta)}{1-\beta}$ and $c_{\beta}=\frac{1}{1-\beta}$.\\
 
-
+\noindent We consider the above bound as a bound for the {\em naive} approach since it provides
+same penalty for making mistakes on different moves. We attempt to lose this assumption by
+modeling the poker experts in a more realistic manner. Let $\beta_{move=\{c, r, f, k\}}$ be the
+penalty factor for the expert making mistake on the corresponding move. When the learner loses
+a round, then the expert which predicted a \texttt{raise} should be penalized more than the expert
+predicting a \texttt{call} since the former caused a greater loss of money. Similarly, when the learner
+wins a round, then the expert which predicted a \texttt{fold} should be penalized more than the expert
+predicting a \texttt{check} since the former caused the learner to quit and lose the opportunity to gain
+money by staying in the game. Therefore, let there exist $\epsilon>0$ such that we let $\beta_c + \epsilon
+= \beta_r$ and $\beta_k + \epsilon = \beta_f$. Equation~\ref{eq:same-beta} can thus be re-framed for the following
+two cases
+\subsubsection*{Case: $y_t = lost$}
+\begin{align}
+W_{t+1} &= \Sum_{i:\xi_{t,i}=c}w_{t,i}\beta_c + \Sum_{i:\xi_{t,i}=r}w_{t,i}\beta_r + \Sum_{i:\xi_{t,i}=^*y_t}w_{t,i}\tag*{}\\
+&= \beta_cq_{t,c} + \beta_rq_{t,r} + \Sum_{i:\xi_{t,i}=^*y_t}w_{t,i}\tag*{}\\
+&= \beta_c(q_{t,c}+q_{t,r}) + \epsilon q_{t,r} + \Sum_{i:\xi_{t,i}=^*y_t}w_{t,i}\tag*{}\\
+&= \beta_cl_tW_t + \epsilon q_{t,r} + (W_t - l_tW_t)\tag*{}\\
+&= W_t(1-l_t(1\beta_c)) + \epsilon q_{t,r}
+\end{align}
 
 \section{Winnow Algorithm}
 
