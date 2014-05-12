@@ -63,7 +63,7 @@
 % should be used if it is desired that the figures are to be displayed in
 % draft mode.
 %
-\documentclass[11pt,conference]{IEEEtran}
+\documentclass[12pt,conference]{IEEEtran}
 % Add the compsoc option for Computer Society conferences.
 %
 % If IEEEtran.cls has not been installed into the LaTeX system files,
@@ -72,7 +72,7 @@
 
 
 
-
+\input{latex-config}
 
 % Some very useful LaTeX packages include:
 % (uncomment the ones you want to load)
@@ -354,7 +354,7 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{EavesDroid: Keystroke Recovery using Mobile Phone Accelerometers}
+\title{Exploration of Near-optimal strategies for Poker}
 
 % author names and affiliations
 % use a multiple column layout for up to three different
@@ -431,13 +431,30 @@
 
 
 \section{Introduction}
-% no \IEEEPARstart
-\label{sec:introduction}
+
+\section{Background Study}
+
+\section{Overview of Texas Hold'em Poker}
+
+\section{Game Setup}
+
+\section{Randomized Weighted Majority Algorithm}
+\label{sec:rwma}
+\noindent In the algorithm, the experts are predicting whether the learner should call, raise, check
+or fold and the learner makes a move by choice of the randomized weighted majority
+among the experts. The observed label $y_t$ (win/loss) is then used to update
+the weights of all the experts. We keep track of the sum of the weights of all the $N$ experts $W_t =
+\Sum_{i=1}^Nw_{t,i}$ on each round t.
+
+\section{Winnow Algorithm}
+
 \section{Related Work}
+
+\section{Experimentation}
 
 ~\cite{bats-nytimes}
 
-\section{Conclusions}
+\section{Conclusion}
 
 \subsection{Future Work}
 

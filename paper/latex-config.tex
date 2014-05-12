@@ -1,0 +1,56 @@
+\usepackage{amsmath}    % need for subequations
+\usepackage{graphicx}   % need for figures
+\usepackage{verbatim}   % useful for program listings
+\usepackage{color}      % use if color is used in text
+\usepackage{subfig}	% use for side-by-side figures
+\usepackage{hyperref}   % use for hypertext links, including those to external
+                        % documents and URLs
+\usepackage{soul}       % strike latex
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{wasysym}
+\usepackage{relsize}
+
+\newcommand{\eg}{{\em e.g.}, }
+\newcommand{\ie}{{\em i.e.}, }
+\newcommand{\etal}{{\em et al.\ }}
+\newcommand{\etc}{{\em etc.}}
+\newcommand{\eps}{{\epsilon}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\mb}[1]{\mathbb{#1}}
+\newcommand{\euler}{\mathrm{e}}
+\newcommand{\mat}[1]{{\bf#1}}
+\newcommand{\Prod}{\mathlarger{\prod}}
+\newcommand{\Sum}{\mathlarger{\sum}}
+\newcommand{\eto}[1]{e^{#1}}
+
+\renewcommand{\comment}[1]{}
+
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{proposition}{Proposition}
+\newtheorem*{statement}{Statement}
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}[section]
+\newtheorem*{counterexample}{Counter Example}
+
+\allowdisplaybreaks
+
+%% Aligned Box in equations of the align mode
+\usepackage{calc,amsmath}
+\newlength\dlf
+\newcommand\alignedbox[2]{
+  % #1 = before alignment
+  % #2 = after alignment
+  &
+  \begingroup
+  \settowidth\dlf{$\displaystyle #1$}
+  \addtolength\dlf{\fboxsep+\fboxrule}
+  \hspace{-\dlf}
+  \boxed{#1 #2}
+  \endgroup
+}
+
+%% underbar
+\usepackage{accents}
+\newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
