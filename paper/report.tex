@@ -11,7 +11,7 @@
 
 \begin{document}
 
-\title{COS 511: Assignment VII}
+\title{Exploration of Near-optimal strategies for Poker}
 \author{
 	Yi-Hsien Lin \\ yishien@princeton.edu \and
 	Akshay Mittal \\ akshay@princeton.edu
@@ -34,15 +34,51 @@
 or fold and the learner makes a move by choice of the randomized weighted majority
 among the experts. The observed label $y_t$ (win/loss) is then used to update
 the weights of all the experts. We keep track of the sum of the weights of all the $N$ experts $W_t =
-\Sum_{i=1}^Nw_{t,i}$ on each round t. Initially let $W_1 = N$, and on each round $t$, the probability
-(over the algorithm's randomization) that the algorithm makes an mistake is
+\Sum_{i=1}^Nw_{t,i}$ on each round $t$. We define $q_{t,move=\{c,r,k,f\}}$ as the sum of the weights
+of the experts predicting the corresponding move at round $t$ \ie \[q_{t,move}=\Sum_{i:\xi_{t,i}=move}w_{t,i}\]
+Initially let $W_1 = N$,
+and on each round $t$, the probability (over the algorithm's randomization) that the algorithm makes a mistake is
 \begin{align}
 l_t &= Pr[\hat{y}_t\neq y_t]\tag*{}\\
 &=\begin{cases}
   	(q_{t,c} + q_{t, r})/W_t & \text{if}~y_{t}=lost~or~0\\
   	(q_{t,k} + q_{t, f})/W_t & \text{if}~y_{t}=won~or~1\\
-	\end{cases}\tag*{}
+	\end{cases}
+\label{eq:prob-mistake}
 \end{align}
+\noindent The intuition behind the above probability is that when the learner loses
+a round of poker, then all the experts, who made the learner stay in the game by paying
+additional money, should be penalized and their weights be reduced. This corresponds to
+the experts that predict \texttt{call} or \texttt{raise} since the observation is a lost
+game and the learner loses money. By a similar argument, in the case of a win observation,
+the weights of the experts, who made the learner leave the game and lost the opportunity
+to make more money, are penalized, precisely the experts that predict \texttt{fold} or
+\texttt{check}.\\
+
+\noindent In order to relate the predictions of the experts (in terms of {\em moves}) with the
+observations (result of game) of the learner, we define the {\em equality} operator
+$=^*$ as follows
+\begin{align*}
+call &\neq^* lost\\
+raise &\neq^* lost\\
+fold &\neq^* won\\
+check &\neq^* won
+\end{align*}
+\noindent Using the above inequalities, we can rewrite Equation~\ref{eq:prob-mistake} as follows
+\begin{align}
+l_t = \Sum_{i:\xi_{t,i}\neq^*y_t}w_{t,i}/W_t
+\end{align}
+\noindent Therefore, we can compute the new sum of weights as follows
+\begin{align}
+W_{t+1} &= \Sum_{i:\xi_{t,i}\neq^*y_t}w_{t+1,i} + \Sum_{i:\xi_{t,i}=^*y_t}w_{t+1,i}\tag*{}\\
+&= \Sum_{i:\xi_{t,i}\neq^*y_t}w_{t,i}\beta + \Sum_{i:\xi_{t,i}=^*y_t}w_{t,i}
+\label{eq:same-beta}
+\end{align}
+\noindent In Equation~\ref{eq:same-beta}, it is assumed the experts are penalized with the same
+weight factor $\beta$ irrespective of the mis-predictions made on \texttt{call}, \texttt{raise},
+\texttt{fold} or \texttt{check}.
+
+
 
 \section{Winnow Algorithm}
 
