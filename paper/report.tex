@@ -12,7 +12,7 @@
 
 \begin{document}
 
-\title{Exploration of Near-optimal strategies for Poker}
+\title{Online Learning for Heads-up Poker}
 \author{
 	Yi-Hsien Lin \\ yishien@princeton.edu \and
 	Akshay Mittal \\ akshay@princeton.edu
@@ -204,6 +204,15 @@ factor $T$ in the definition for $\gamma$. This implies that when $\epsilon$ is 
 In fact, given a set of $N$ experts, the learner algorithm can determine the optimal values of $\beta_c$ and the number of rounds $T$ to play
 the game for, in order to make the least number of mistakes and hence get the highest returns possible.
 
+\section{Experimentation}
+\label{sec:experimentation}
+\noindent With the purpose of testing our online learning algorithm, we built a heads-up poker simulator
+which can be played between an human and a computer learning player. We aimed to implement randomized weighted
+majority algorithm using data from real experts and learning the other players playing pattern on the fly. However,
+in the interest of time and the complexity of building a successful simulator, we were able to build the game (\texttt{2393} LOC)
+but without the online learning component. We have made the game publicly available, and it can be played from this
+link \url{https://github.com/yihsien/H2HPoker}.
+
 \section{Related Work}
 \label{sec:related}
 \noindent In~\cite{quek2009evolving}, Quek \etal develop a poker A.I. that plays approximately at Nash equilibrium (NE) using an
@@ -225,6 +234,8 @@ given the current state of the game. Pfund \etal\cite{upenn-svm} build the playe
 \noindent We note there is a plethora of research articles aiming to build an autonomous poker player which guarantees positive returns.
 
 \section{Conclusion}
+\label{sec:conclusion}
+\noindent In this project study, we provide extensive analysis of 
 
 \subsection{Future Work}
 
