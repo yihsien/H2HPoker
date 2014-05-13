@@ -22,7 +22,7 @@
 \maketitle
 
 \section{Introduction}
-The problem of how to win in a Texas Hold'em Poker game has always been a popular research topic. Originally, game theory has been the dominant tool in solving poker games. However, as the result of drastically increasing computational power and ballooing interest over the past few years, machine learning  has also taken a place in the poker solving domain.\\
+The problem of how to win in a Texas Hold'em Poker game has always been a popular research topic. Originally, game theory has been the dominant tool in solving poker games. However, as the result of drastically increasing computational power and ballooning interest over the past few years, machine learning  has also taken a place in the poker solving domain.\\
 \\
 Since we are both enthusiastic poker players, this problem quickly came to our mind while deciding the project topic. After surveying related works that have been conducted in the past, we discovered that due to the gigantic search space, most studies simplified the game a lot, such as restricting \emph{raising} and shortening the game from four bets to one bet only.
 Clearly, such restrictions are very unrealistic and raised our interest in discovering if it is possible to develop an optimal or near-optimal strategy of an non-handicapped Texas Hold'em Poker game.\\
@@ -31,16 +31,13 @@ In this paper, a very brief overview of the rules of Texas Hold'em and our game 
 
 
 \section{Overview of Texas Hold'em Poker}
-Texas hold'em is a variation of poker, one of the most popular game among other variations. Texas hold'em poker consists of two cards being dealt face down to each player as hole cards, which is the "pre-flop phase". Then, five community cards are being placed face-up on the table. The community cards come in the order of a series of three cards, also known as "the flop," then an additional card, known as "the turn," and finally the last card, known as "the river." Players have the options of calling, raising, checking, or folding on each betting round. After the river card is dealt, each player plays the best poker hand they can make from the seven cards comprising the two hole cards and the five community cards. A player may use both of the two hole cards, only one, or none at all, to form his final five card hand. A player can win the pot when one have the best hand at showdown, or when all other player folds
-
-\section{Game Setup}
-
+Texas Hold'em is a variation of poker, one of the most popular game among other variations. Texas Hold'em poker consists of two cards being dealt face down to each player as hole cards, which is the ``pre-flop phase". Then, five community cards are being placed face-up on the table. The community cards come in the order of a series of three cards, also known as ``the flop", then an additional card, known as ``the turn", and finally the last card, known as ``the river". Players have the options of \texttt{calling, raising, checking, or folding} on each betting round. After the river card is dealt, each player plays the best poker hand they can make from the seven cards comprising the two hole cards and the five community cards. A player may use both of the two hole cards, only one, or none at all, to form his final five card hand. A player can win the pot when one have the best hand at showdown, or when all other player folds
 
 \section{Randomized Weighted Majority Algorithm (RWMA)}
 \subsection{Game Setup}
-In order to apply online learning algorithms to poker, we first need to acquire many experts. The experts of the randomized weighted majority algorithm are the complete hands of poker of other expert players. When playing heads up poker, player A will follow the recommended bet of the algorithm's output. As for player B, it can either be a human player or a computer with some non-optimal betting strategies. \\
+In order to apply online learning algorithms to poker, we first need to acquire many experts. The experts of the randomized weighted majority algorithm are the complete hands of poker of other expert players. When playing heads up poker, player A will follow the recommended bet of the algorithm's output. As for player B, it can either be a human player or a computer with some non-optimal betting strategies. There are many publicly available expert players' game plays~\cite{experts}.\\
 \\
-Note that we follow the complete Texas Hold'em Poker game rule, which consists of four betting phases mentioned in the previous chapter. We also allow the player to play all four bets, which are call(c), raise(r), check(k) and fold(f) repectively. The game starts with two participating players having the exact same amount of money and ends whenever a player's money reaches 0.
+Note that we follow the complete Texas Hold'em Poker game rule, which consists of four betting phases mentioned in the previous chapter. We also allow the player to play all four bets, which are \texttt{call(c)}, \texttt{raise(r)}, \texttt{check(k)} and \texttt{fold(f)} repectively. The game starts with two participating players having the exact same amount of money and ends whenever a player's money reaches 0.
 \subsection{Overview of RWMA}
 \label{sec:rwma}
 \noindent In the algorithm, the experts are predicting whether the learner should call, raise, check
@@ -163,9 +160,6 @@ W_{final} &\leq N\exp{\left(-(1-\beta_r)L_A\right)} - \sigma\epsilon\beta_c^T\Su
 &= (N - \sigma\epsilon\beta_c^TT)\exp\{\left(-(1-\beta_r)L_A\right)\}
 \label{eq:w-final}
 \end{align}
-\noindent 
-
-\subsection{Analysis of the Assumptions}
 \noindent If the expert $i$ makes $L_i$ mistakes, then we have
 \begin{align*}
 \beta_{move=\{c,r,f,k\}}^{L_i} &= w_i\\
