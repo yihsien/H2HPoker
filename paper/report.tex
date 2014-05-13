@@ -246,7 +246,7 @@ following different strategies.
 We implemented a complete terminal based heads up Texas Hold'em Poker game. However, this implementation took much longer than the time we initally estimated due to many detail poker rules and game logic. Due to this reason, we didn't have time to fincorporate the experts into our algorithm and conduct experiments to verify our theory's correctness. Therefore, our first priority in the future is to finish the implementation and examine if the result aligns with our theory.
 \\
 \\
-Currently, the lable of each bet is determined by whether the player won in that specific round or not. However, this labeling method is not very representitive. For example, there are situations that the 
+Currently, the lable of each bet is determined by whether the player won that specific round or not. However, this labeling method is not very representitive. For example, there are situations that a player had a very good hand until the last table card appears. Under this scenario, a correct expert that suggests the player to raise for the first three bets and recommend folding after the last card shows up would be heavily penalized by our algorithm. Therefore, in the future, we also plan to label each bet by computing the optimal hand according to game theory. 
 
 
 
