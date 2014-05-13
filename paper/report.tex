@@ -1,18 +1,18 @@
 \documentclass[12pt]{article}
 \usepackage{amsmath}
 
-%% http://en.wikibooks.org/wiki/LaTeX/Page_Layout#Margins
+% http://en.wikibooks.org/wiki/LaTeX/Page_Layout#Margins
 \usepackage[margin=1in]{geometry}
 
 \input{latex-config}
 
-%% Suppress page numbering
+% Suppress page numbering
 \pagenumbering{gobble}
-%\pagenumbering{roman}
+\pagenumbering{roman}
 
 \begin{document}
 
-\title{Exploration of Near-optimal strategies for Poker}
+\title{Online Learning for Heads-up Poker}
 \author{
 	Yi-Hsien Lin \\ yishien@princeton.edu \and
 	Akshay Mittal \\ akshay@princeton.edu
@@ -210,17 +210,56 @@ factor $T$ in the definition for $\gamma$. This implies that when $\epsilon$ is 
 In fact, given a set of $N$ experts, the learner algorithm can determine the optimal values of $\beta_c$ and the number of rounds $T$ to play
 the game for, in order to make the least number of mistakes and hence get the highest returns possible.
 
+\section{Experimentation}
+\label{sec:experimentation}
+\noindent With the purpose of testing our online learning algorithm, we built a heads-up poker simulator
+which can be played between an human and a computer learning player. We aimed to implement randomized weighted
+majority algorithm using data from real experts and learning the other players playing pattern on the fly. However,
+in the interest of time and the complexity of building a successful simulator, we were able to build the game (\texttt{2393} LOC)
+but without the online learning component. We have made the game publicly available, and it can be played from this
+link \url{https://github.com/yihsien/H2HPoker}.
+
 \section{Related Work}
+\label{sec:related}
+\noindent In~\cite{quek2009evolving}, Quek \etal develop a poker A.I. that plays approximately at Nash equilibrium (NE) using an
+evolutionary algorithm (EA) that employs offline competitive co-evolution as means of adaptation. Although this work does not directly
+influence this project study, it is important to realise that besides online learning algorithms, EA algorithms can generate
+good computer poker players. The model is limited to a much simplified version of poker where there are only three cards
+and no concept of raising and multiple betting.\\
 
-\section{Closing Words}
+\noindent In~\cite{stanford-report}, Lingg \etal create a Texas Hold'Em poker player using Reinforcement learning and Supervised learning schemes.
+The player plays optimally in 1 on 1 poker games but being a supervised learner, the computer player needs to play many games with any
+new opponent in order to determine the latter's playing pattern. In~\cite{swanson2005game}, Swanson \etal uses game theory to
+create an optimal poker player for an extremely simplified version of poker.\\
 
-\subsection{Future Work}
+\noindent The number of nodes in a full Texas Hold'Em poker game are $O(10^{18})$ and Billings \etal\cite{billings2003approximating} present
+several abstraction techniques to represent the game using closely related models with size $O(10^7)$. Linear programming solutions are used for
+building a poker player. Kumar \etal\cite{stanford-mdp} use Markov Decision Processes to determine the best move available to the player
+given the current state of the game. Pfund \etal\cite{upenn-svm} build the player using support vector machines.\\
+
+\noindent We note there is a plethora of research articles aiming to build an autonomous poker player which guarantees positive returns.
+
+\section{Conclusion}
+\label{sec:conclusion}
+\noindent In this project study, we provide extensive analysis of applying an online learning algorithm to a complete version of Heads-up poker. Under
+minimal assumptions, we are able to provide a bound for the expected number of mistakes made by the algorithm in terms of the moves (\texttt{call},
+\texttt{raise}, \texttt{fold}, \texttt{check}) of the game. We have not shown whether the bound is tight but an online learning poker player
+can decide the parameters - the number of experts and the number of rounds to play the game - in order to achieve positive returns from her investment.
+We have also provided a full-scale implementation of the Heads-up poker which provides a scalable infrastructure to add any number of computer players,
+following different strategies.
+
+\section{Future Work}
 We implemented a complete terminal based heads up Texas Hold'em Poker game. However, this implementation took much longer than the time we initally estimated due to many detail poker rules and game logic. Due to this reason, we didn't have time to fincorporate the experts into our algorithm and conduct experiments to verify our theory's correctness. Therefore, our first priority in the future is to finish the implementation and examine if the result aligns with our theory.
 \\
 \\
 Currently, the lable of each bet is determined by whether the player won in that specific round or not. However, this labeling method is not very representitive. For example, there are situations that the 
 
-\subsection{Conclusion}
 
+
+\section*{Acknowledgment}
+\noindent We would like to thank Prof. Robert Schapire for his excellent teaching which provided us with deep insight, kwowledge and tools that helped us present this project study.
+
+\bibliographystyle{unsrt}
+\bibliography{report}
 
 \end{document}
