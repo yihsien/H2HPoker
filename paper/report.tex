@@ -1,4 +1,5 @@
 \documentclass[12pt]{article}
+\usepackage{amsmath}
 
 %% http://en.wikibooks.org/wiki/LaTeX/Page_Layout#Margins
 \usepackage[margin=1in]{geometry}
@@ -34,7 +35,7 @@
 or fold and the learner makes a move by choice of the randomized weighted majority
 among the experts. The observed label $y_t$ (win/loss) is then used to update
 the weights of all the experts. We keep track of the sum of the weights of all the $N$ experts $W_t =
-\Sum_{i=1}^Nw_{t,i}$ on each round $t$. We define $q_{t,move=\{c,r,k,f\}}$ as the sum of the weights
+\sum_{i=1}^Nw_{t,i}$ on each round $t$. We define $q_{t,move=\{c,r,k,f\}}$ as the sum of the weights
 of the experts predicting the corresponding move at round $t$ \ie \[q_{t,move}=\Sum_{i:\xi_{t,i}=move}w_{t,i}\]
 Initially let $W_1 = N$,
 and on each round $t$, the probability (over the algorithm's randomization) that the algorithm makes a mistake is
@@ -83,23 +84,76 @@ majority algorithm \ie
 
 \noindent We consider the above bound as a bound for the {\em naive} approach since it provides
 same penalty for making mistakes on different moves. We attempt to lose this assumption by
-modeling the poker experts in a more realistic manner. Let $\beta_{move=\{c, r, f, k\}}$ be the
+modeling the poker experts in a more realistic manner.
+
+\subsection{Modeling a Realistic Poker Player}
+Let $\beta_{move=\{c, r, f, k\}}$ be the
 penalty factor for the expert making mistake on the corresponding move. When the learner loses
 a round, then the expert which predicted a \texttt{raise} should be penalized more than the expert
 predicting a \texttt{call} since the former caused a greater loss of money. Similarly, when the learner
 wins a round, then the expert which predicted a \texttt{fold} should be penalized more than the expert
 predicting a \texttt{check} since the former caused the learner to quit and lose the opportunity to gain
-money by staying in the game. Therefore, let there exist $\epsilon>0$ such that we let $\beta_c + \epsilon
-= \beta_r$ and $\beta_k + \epsilon = \beta_f$. Equation~\ref{eq:same-beta} can thus be re-framed for the following
-two cases
+money by staying in the game. Therefore, let $\sigma$ be the Rademacher variable and
+let there exist $\epsilon>0$ such that we let $\beta_c + \sigma\epsilon
+= \beta_r$ and $\beta_k + \sigma\epsilon = \beta_f$ and let $\beta_r = \beta_f$.
+Equation~\ref{eq:same-beta} can thus be re-framed for the following two cases
 \subsubsection*{Case: $y_t = lost$}
 \begin{align}
 W_{t+1} &= \Sum_{i:\xi_{t,i}=c}w_{t,i}\beta_c + \Sum_{i:\xi_{t,i}=r}w_{t,i}\beta_r + \Sum_{i:\xi_{t,i}=^*y_t}w_{t,i}\tag*{}\\
 &= \beta_cq_{t,c} + \beta_rq_{t,r} + \Sum_{i:\xi_{t,i}=^*y_t}w_{t,i}\tag*{}\\
-&= \beta_c(q_{t,c}+q_{t,r}) + \epsilon q_{t,r} + \Sum_{i:\xi_{t,i}=^*y_t}w_{t,i}\tag*{}\\
-&= \beta_cl_tW_t + \epsilon q_{t,r} + (W_t - l_tW_t)\tag*{}\\
-&= W_t(1-l_t(1\beta_c)) + \epsilon q_{t,r}
+&= (\beta_r-\sigma\epsilon)q_{t,c} + \beta_rq_{t,r} + \Sum_{i:\xi_{t,i}=^*y_t}w_{t,i}\tag{$\because \beta_c + \sigma\epsilon = \beta_r$}\\
+&= \beta_q(q_{t,c}+q_{t,r}) - \sigma\epsilon q_{t,c} + \Sum_{i:\xi_{t,i}=^*y_t}w_{t,i}\tag*{}\\
+&= \beta_rl_tW_t - \sigma\epsilon q_{t,c} + (W_t - l_tW_t)\tag*{}\\
+&= W_t(1-l_t(1-\beta_r)) - \sigma\epsilon q_{t,c}
+\label{eq:yt-lost}
 \end{align}
+
+\subsubsection*{Case: $y_t = won$}
+By a similar analysis as for the case above, we get
+\begin{align}
+\label{eq:yt-won}
+W_{t+1} &= W_t(1-l_t(1-\beta_f)) - \sigma\epsilon q_{t,k}\\
+&= W_t(1-l_t(1-\beta_r)) - \sigma\epsilon q_{t,k}\tag{$\because \beta_r=\beta_f$ by assumption}
+\end{align}
+
+\noindent $q_{t,c}$ is the sum of the weights of the experts predicting the move to be \texttt{call}
+at round $t$. We can provide an upper bound on $q_{t,c}$ and $q_{t,k}$ by the lowest weight of any expert at the end of
+$T$ rounds \ie
+\begin{align}
+\label{eq:bound-qtc}
+\beta_c^T&\leq q_{t,c}\\
+\beta_c^T&\leq q_{t,k}
+\label{eq:bound-qtk}
+\end{align}
+\noindent Thus, using the above bounds, we can re-write Equations~\ref{eq:yt-lost},~\ref{eq:yt-won} as
+\begin{align}
+W_{t+1} \leq W_t(1-l_t(1-\beta_r)) - \sigma\epsilon\beta_c^T
+\label{eq:wt-plus1}
+\end{align}
+
+\noindent Then we can write the sum of the weights at the end of $T$ rounds as
+\begin{align*}
+W_{final} &\leq\Prod_{t=1}^T[1-l_t(1-\beta_r)]W_1 - \Sum_{i=1}^T\left\{\sigma\epsilon\beta_c^T\Prod_{t=1}^{T-i}[1-l_t(1-\beta_r)]\right\}\\
+&=N\Prod_{t=1}^T[1-l_t(1-\beta_r)] - \sigma\epsilon\beta_c^T\Sum_{i=1}^T\Prod_{t=1}^{T-i}[1-l_t(1-\beta_r)]\\
+&=N\Prod_{t=1}^T[1-l_t(1-\beta_r)] + \sigma\epsilon\beta_c^T\Sum_{i=1}^T\Prod_{t=1}^{T-i}[1-l_t(1-\beta_r)]\tag{$\because \sigma$ is $\pm1$ with equal probability}\\
+&\leq N\Prod_{t=1}^T\exp{\left(-l_t(1-\beta_r)\right)} + \sigma\epsilon\beta_c^T\Sum_{i=1}^T\Prod_{t=1}^{T-i}\exp{\left(-l_t(1-\beta_r)\right)}
+\tag{$\because1+x\leq e^x$}\\
+&= N\Prod_{t=1}^T\exp{\left(-l_t(1-\beta_r)\right)} - \sigma\epsilon\beta_c^T\Sum_{i=1}^T\Prod_{t=1}^{T-i}\exp{\left(-l_t(1-\beta_r)\right)}
+\tag{$\because \sigma$ is $\pm1$ with equal probability}\\
+&= N\exp{\left(-(1-\beta_r)\Sum_{t=1}^Tl_t\right)} - \sigma\epsilon\beta_c^T\Sum_{i=1}^T\exp{\left(-(1-\beta_r)\Sum_{t=1}^{T-i}l_t\right)}
+\end{align*}
+\noindent By defining $L_A=\sum_{t=1}^Tl_t$ as the expected number of mistakes the algorithm makes, we have from above
+\begin{align}
+W_{final} &\leq N\exp{\left(-(1-\beta_r)L_A\right)} - \sigma\epsilon\beta_c^T\Sum_{i=1}^T\exp{\left(-(1-\beta_r)\Sum_{t=1}^{T-i}l_t\right)}\tag*{}\\
+&\leq N\exp{\left(-(1-\beta_r)L_A\right)} - \sigma\epsilon\beta_c^T\Sum_{i=1}^T\exp{\left(-(1-\beta_r)L_A\right)}
+\tag{$\because\Sum_{t=1}^{T-i}l_t\leq L_A$}\\
+&= N\exp{\left(-(1-\beta_r)L_A\right)} - \sigma\epsilon\beta_c^TT\exp{\left(-(1-\beta_r)L_A\right)}\tag*{}\\
+&= (N - \sigma\epsilon\beta_c^TT)\exp\{\left(-(1-\beta_r)L_A\right)\}
+\label{eq:w-final}
+\end{align}
+\noindent 
+
+\subsection{Analysis of the Assumptions}
 
 \section{Winnow Algorithm}
 
