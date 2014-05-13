@@ -151,7 +151,22 @@ W_{final} &\leq N\exp{\left(-(1-\beta_r)L_A\right)} - \sigma\epsilon\beta_c^T\Su
 &= (N - \sigma\epsilon\beta_c^TT)\exp\{\left(-(1-\beta_r)L_A\right)\}
 \label{eq:w-final}
 \end{align}
-\noindent 
+\noindent If the expert $i$ makes $L_i$ mistakes, then we have
+\begin{align*}
+\beta_{move=\{c,r,f,k\}}^{L_i} &= w_i\\
+&\leq W_{final}\\
+&\leq (N - \sigma\epsilon\beta_c^TT)\exp\{\left(-(1-\beta_r)L_A\right)\}\tag{from Eq.~\ref{eq:w-final}}
+\end{align*}
+\noindent The maximum possible weight for expert $i$ can be $\beta_r^{L_i}$ and from the above inequality, we thus get
+\begin{align*}
+\beta_{r}^{L_i} &\leq (N - \sigma\epsilon\beta_c^TT)\exp\{\left(-(1-\beta_r)L_A\right)\}\\
+\frac{\beta_{r}^{L_i}}{(N - \sigma\epsilon\beta_c^TT)} &\leq \exp\{\left(-(1-\beta_r)L_A\right)\}\\
+\ln\frac{\beta_{r}^{L_i}}{(N - \sigma\epsilon\beta_c^TT)} &\leq -(1-\beta_r)L_A\tag{assuming $N > T\epsilon\beta_c^T$}\\
+\alignedbox{L_A}{\leq \frac{L_i\ln\frac{1}{\beta_r}+\ln N + \ln(1-\gamma_{\sigma})}{1-\beta_r}}\tag{let $\gamma_{\sigma}=\frac{T\epsilon\beta_c^T}{N}$}
+\end{align*}
+
+
+
 
 \subsection{Analysis of the Assumptions}
 
