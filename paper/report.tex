@@ -31,11 +31,17 @@ In this paper, a very brief overview of the rules of Texas Hold'em and our game 
 
 
 \section{Overview of Texas Hold'em Poker}
-Texas hold'em is a variation of poker, one of the most popular game among other variations. Texas hold'em poker consists of two cards being dealt face down to each player as hole cards. Then, five community cards are being placed face-up on the table. The community cards come in the order of a series of three cards, also known as "the flop," then an additional card, known as "the turn," and finally the last card, known as "the river." Players have the options of raising, checking, or folding on each betting round. After the river card is dealt, each player plays the best poker hand they can make from the seven cards comprising the two hole cards and the five community cards. A player may use both of the two hole cards, only one, or none at all, to form his final five card hand. A player can win the pot when one have the best hand at showdown, or when all other player folds
+Texas hold'em is a variation of poker, one of the most popular game among other variations. Texas hold'em poker consists of two cards being dealt face down to each player as hole cards, which is the "pre-flop phase". Then, five community cards are being placed face-up on the table. The community cards come in the order of a series of three cards, also known as "the flop," then an additional card, known as "the turn," and finally the last card, known as "the river." Players have the options of calling, raising, checking, or folding on each betting round. After the river card is dealt, each player plays the best poker hand they can make from the seven cards comprising the two hole cards and the five community cards. A player may use both of the two hole cards, only one, or none at all, to form his final five card hand. A player can win the pot when one have the best hand at showdown, or when all other player folds
 
 \section{Game Setup}
 
-\section{Randomized Weighted Majority Algorithm}
+
+\section{Randomized Weighted Majority Algorithm (RWMA)}
+\subsection{Game Setup}
+In order to apply online learning algorithms to poker, we first need to acquire many experts. The experts of the randomized weighted majority algorithm are the complete hands of poker of other expert players. When playing heads up poker, player A will follow the recommended bet of the algorithm's output. As for player B, it can either be a human player or a computer with some non-optimal betting strategies. \\
+\\
+Note that we follow the complete Texas Hold'em Poker game rule, which consists of four betting phases mentioned in the previous chapter. We also allow the player to play all four bets, which are call(c), raise(r), check(k) and fold(f) repectively. The game starts with two participating players having the exact same amount of money and ends whenever a player's money reaches 0.
+\subsection{Overview of RWMA}
 \label{sec:rwma}
 \noindent In the algorithm, the experts are predicting whether the learner should call, raise, check
 or fold and the learner makes a move by choice of the randomized weighted majority
@@ -206,8 +212,15 @@ the game for, in order to make the least number of mistakes and hence get the hi
 
 \section{Related Work}
 
-\section{Conclusion}
+\section{Closing Words}
 
 \subsection{Future Work}
+We implemented a complete terminal based heads up Texas Hold'em Poker game. However, this implementation took much longer than the time we initally estimated due to many detail poker rules and game logic. Due to this reason, we didn't have time to fincorporate the experts into our algorithm and conduct experiments to verify our theory's correctness. Therefore, our first priority in the future is to finish the implementation and examine if the result aligns with our theory.
+\\
+\\
+Currently, the lable of each bet is determined by whether the player won in that specific round or not. However, this labeling method is not very representitive. For example, there are situations that the 
+
+\subsection{Conclusion}
+
 
 \end{document}
