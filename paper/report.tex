@@ -158,17 +158,27 @@ W_{final} &\leq N\exp{\left(-(1-\beta_r)L_A\right)} - \sigma\epsilon\beta_c^T\Su
 &\leq (N - \sigma\epsilon\beta_c^TT)\exp\{\left(-(1-\beta_r)L_A\right)\}\tag{from Eq.~\ref{eq:w-final}}
 \end{align*}
 \noindent The maximum possible weight for expert $i$ can be $\beta_r^{L_i}$ and from the above inequality, we thus get
-\begin{align*}
-\beta_{r}^{L_i} &\leq (N - \sigma\epsilon\beta_c^TT)\exp\{\left(-(1-\beta_r)L_A\right)\}\\
-\frac{\beta_{r}^{L_i}}{(N - \sigma\epsilon\beta_c^TT)} &\leq \exp\{\left(-(1-\beta_r)L_A\right)\}\\
+\begin{align}
+\beta_{r}^{L_i} &\leq (N - \sigma\epsilon\beta_c^TT)\exp\{\left(-(1-\beta_r)L_A\right)\}\tag*{}\\
+\frac{\beta_{r}^{L_i}}{(N - \sigma\epsilon\beta_c^TT)} &\leq \exp\{\left(-(1-\beta_r)L_A\right)\}\tag*{}\\
 \ln\frac{\beta_{r}^{L_i}}{(N - \sigma\epsilon\beta_c^TT)} &\leq -(1-\beta_r)L_A\tag{assuming $N > T\epsilon\beta_c^T$}\\
-\alignedbox{L_A}{\leq \frac{L_i\ln\frac{1}{\beta_r}+\ln N + \ln(1-\gamma_{\sigma})}{1-\beta_r}}\tag{let $\gamma_{\sigma}=\frac{T\epsilon\beta_c^T}{N}$}
-\end{align*}
+\alignedbox{L_A}{\leq \frac{L_i\ln\frac{1}{\beta_r}+\ln N + \ln(1-\gamma_{\sigma})}{1-\beta_r}}
+\label{eq:la-bound}
+\end{align}
+\noindent where $\gamma_{\sigma}=\sigma\frac{T\epsilon\beta_c^T}{N}$ and $\gamma=\frac{T\epsilon\beta_c^T}{N}$.
+Note that the above bound holds only when $\gamma < 1$. Using the fact that $\beta_r = \beta_c + \sigma\epsilon$ and
+taking expectation with respect to $\sigma$, we get
+\begin{align}
+L_A = \mathbb{E}_{\sigma}[L_A] &\leq \mathbb{E}_{\sigma}\left[\frac{L_i\ln\frac{1}{\beta_r}+\ln N + \ln(1-\gamma_{\sigma})}{1-\beta_r}\right]\tag*{}\\
+&= \mathbb{E}_{\sigma}\left[\frac{L_i\ln\frac{1}{(\beta_c + \sigma\epsilon)}+\ln N + \ln(1-\gamma_{\sigma})}{1-\beta_c - \sigma\epsilon}\right]\tag*{}\\
+\alignedbox{L_A}{\leq \frac{1}{2}\left[\frac{L_i\ln\frac{1}{(\beta_c + \epsilon)}+\ln N + \ln(1-\gamma)}{1-\beta_c - \epsilon} +
+\frac{L_i\ln\frac{1}{(\beta_c - \epsilon)}+\ln N + \ln(1+\gamma)}{1-\beta_c + \epsilon}\right]}
+\label{eq:la-exact-bound}
+\end{align}
+\noindent Equation~\ref{eq:la-exact-bound} thus provides a bound on the expected number of mistakes made by the algorithm.
 
-
-
-
-\subsection{Analysis of the Assumptions}
+\subsection{Analysis of the Assumptions/Results}
+\label{sec:analysis}
 
 \section{Winnow Algorithm}
 
