@@ -22,6 +22,14 @@
 \maketitle
 
 \section{Introduction}
+The problem of how to win in a Texas Hold'em Poker game has always been a popular research topic. Originally, game theory has been the dominant tool in solving poker games. However, as the result of drastically increasing computational power and ballooing interest over the past few years, machine learning  has also taken a place in the poker solving domain.\\
+\\
+Since we are both enthusiastic poker players, this problem quickly came to our mind while deciding the project topic. After surveying related works that have been conducted in the past, we discovered that due to the gigantic search space, most studies simplified the game a lot, such as restricting \emph{raising} and shortening the game from four bets to one bet only.
+Clearly, such restrictions are very unrealistic and raised our interest in discovering if it is possible to develop an optimal or near-optimal strategy of an non-handicapped Texas Hold'em Poker game.\\
+\\
+In this paper, a very brief overview of the rules of Texas Hold'em and our game setting is first provided. We then demonstrate our developed algorithm for poker playing, based on the Randomized Weighted Majority Algorithm. We also proved that there is a lower bound for the number of non-optimal bets this algorithm would make. Finally, future works and concluding remarks are provided.
+
+
 
 \section{Background Study}
 
@@ -155,11 +163,7 @@ W_{final} &\leq N\exp{\left(-(1-\beta_r)L_A\right)} - \sigma\epsilon\beta_c^T\Su
 
 \subsection{Analysis of the Assumptions}
 
-\section{Winnow Algorithm}
-
 \section{Related Work}
-
-\section{Experimentation}
 
 \section{Conclusion}
 
