@@ -179,8 +179,21 @@ L_A = \mathbb{E}_{\sigma}[L_A] &\leq \mathbb{E}_{\sigma}\left[\frac{L_i\ln\frac{
 
 \subsection{Analysis of the Assumptions/Results}
 \label{sec:analysis}
+\subsubsection*{Rademacher Variable $\sigma$}
+We introduce the Rademacher variable $\sigma$ to randomly shift the weights of predicting \texttt{call} and \texttt{raise}.
+This follows the intuition from the actual game of poker. Usually raising exposes a player to lose more money than to just call
+and hence the former should be given more weight. On the other hand, there are game situations when calling would provide greater
+loss to the player than performing a raise. An example of this situation is when the player is bluffing, she would want raise in
+order to make the other player to fold, rather than call his bet and enter into the next round of better, thereby increasing the risk
+of losing more money.
 
-\section{Winnow Algorithm}
+\subsubsection*{Gamma $\gamma$}
+We define $\gamma=\frac{T\epsilon\beta_c^T}{N}$. The afore-mentioned bound on the expected number of mistakes holds only when
+$\gamma < 1$. We note that when $\epsilon = 0$ \ie all the weight factors are the same, then the bound from Equation~\ref{eq:la-exact-bound}
+reduces to the bound as obtained in the {\em naive} approach. The factor $\beta_c^T$ goes to zero exponentially compared to the linear
+factor $T$ in the definition for $\gamma$. This implies that when $\epsilon$ is very small, then $\gamma$ is bounded even when $T$ grows.
+In fact, given a set of $N$ experts, the learner algorithm can determine the optimal values of $\beta_c$ and the number of rounds $T$ to play
+the game for, in order to make the least number of mistakes and hence get the highest returns possible.
 
 \section{Related Work}
 
