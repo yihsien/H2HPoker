@@ -40,7 +40,7 @@ Texas Hold'em is a variation of poker, one of the most popular game among other 
 \subsection{Game Setup}
 In order to apply online learning algorithms to poker, we first need to acquire many experts. The experts of the randomized weighted majority algorithm are the complete hands of poker of other expert players. When playing heads up poker, player A will follow the recommended bet of the algorithm's output. As for player B, it can either be a human player or a computer with some non-optimal betting strategies. There are many publicly available expert players' game plays~\cite{experts}.\\
 \\
-Note that we follow the complete Texas Hold'em Poker game rule, which consists of four betting phases mentioned in the previous chapter. We also allow the player to play all four bets, which are \texttt{call(c)}, \texttt{raise(r)}, \texttt{check(k)} and \texttt{fold(f)} repectively. The game starts with two participating players having the exact same amount of money and ends whenever a player's money reaches 0.
+Note that we follow the complete Texas Hold'em Poker game rule, which consists of four betting phases mentioned in the previous chapter. We also allow the player to play all four bets, which are \texttt{call(c)}, \texttt{raise(r)}, \texttt{check(k)} and \texttt{fold(f)} respectively. The game starts with two participating players having the exact same amount of money and ends whenever a player's money reaches 0.
 \subsection{Overview of RWMA}
 \label{sec:rwma}
 \noindent In the algorithm, the experts are predicting whether the learner should call, raise, check
@@ -220,7 +220,7 @@ link \url{https://github.com/yihsien/H2HPoker}.
 \label{sec:related}
 \noindent In~\cite{quek2009evolving}, Quek \etal develop a poker A.I. that plays approximately at Nash equilibrium (NE) using an
 evolutionary algorithm (EA) that employs offline competitive co-evolution as means of adaptation. Although this work does not directly
-influence this project study, it is important to realise that besides online learning algorithms, EA algorithms can generate
+influence this project study, it is important to realize that besides online learning algorithms, EA algorithms can generate
 good computer poker players. The model is limited to a much simplified version of poker where there are only three cards
 and no concept of raising and multiple betting.\\
 
@@ -251,7 +251,7 @@ We implemented a complete terminal based heads-up Texas Hold'em Poker game. Howe
 \noindent Currently, the label of each bet is determined by whether the player won that specific round or not. However, this labeling method is not very representative. For example, there are situations that a player might have a very good hand until the last table card appears. Under this scenario, a correct expert that suggests the player to raise for the first three bets and recommends folding after the last card shows up would be heavily penalized by our algorithm. Therefore, in the future, we also plan to label each bet by computing the optimal hand according to game theory.
 
 \section*{Acknowledgment}
-\noindent We would like to thank Prof. Robert Schapire for his excellent teaching which provided us with deep insight, kwowledge and tools that helped us present this project study.
+\noindent We would like to thank Prof. Robert Schapire for his excellent teaching which provided us with deep insight, knowledge and tools that helped us present this project study.
 
 \bibliographystyle{unsrt}
 \bibliography{report}
