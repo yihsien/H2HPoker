@@ -235,9 +235,17 @@ given the current state of the game. Pfund \etal\cite{upenn-svm} build the playe
 
 \section{Conclusion}
 \label{sec:conclusion}
-\noindent In this project study, we provide extensive analysis of 
+\noindent In this project study, we provide extensive analysis of applying an online learning algorithm to a complete version of Heads-up poker. Under
+minimal assumptions, we are able to provide a bound for the expected number of mistakes made by the algorithm in terms of the moves (\texttt{call},
+\texttt{raise}, \texttt{fold}, \texttt{check}) of the game. We have not shown whether the bound is tight but an online learning poker player
+can decide the parameters - the number of experts and the number of rounds to play the game - in order to achieve positive returns from her investment.
+We have also provided a full-scale implementation of the Heads-up poker which provides a scalable infrastructure to add any number of computer players,
+following different strategies.
 
 \subsection{Future Work}
+
+\section*{Acknowledgment}
+\noindent We would like to thank Prof. Robert Schapire for his excellent teaching which provided us with deep insight, kwowledge and tools that helped us present this project study.
 
 \bibliographystyle{unsrt}
 \bibliography{report}
